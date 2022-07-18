@@ -141,7 +141,7 @@ public class UserResult {
     return this;
   }
 
-  public UserResult addDataItem(List<User> dataItem) {
+  public UserResult addDataItem(User dataItem) {
     if (this.data == null) {
       this.data = new ArrayList<>();
     }

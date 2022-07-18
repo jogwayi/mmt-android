@@ -141,7 +141,7 @@ public class NetworkResult {
     return this;
   }
 
-  public NetworkResult addDataItem(List<Network> dataItem) {
+  public NetworkResult addDataItem(Network dataItem) {
     if (this.data == null) {
       this.data = new ArrayList<>();
     }

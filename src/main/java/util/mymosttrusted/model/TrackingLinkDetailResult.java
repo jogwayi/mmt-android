@@ -141,7 +141,7 @@ public class TrackingLinkDetailResult {
     return this;
   }
 
-  public TrackingLinkDetailResult addDataItem(List<TrackingLinkDetail> dataItem) {
+  public TrackingLinkDetailResult addDataItem(TrackingLinkDetail dataItem) {
     if (this.data == null) {
       this.data = new ArrayList<>();
     }

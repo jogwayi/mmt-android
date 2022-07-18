@@ -141,7 +141,7 @@ public class InvitesResult {
     return this;
   }
 
-  public InvitesResult addDataItem(List<Invite> dataItem) {
+  public InvitesResult addDataItem(Invite dataItem) {
     if (this.data == null) {
       this.data = new ArrayList<>();
     }

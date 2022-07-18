@@ -141,7 +141,7 @@ public class ConnectUserResult {
     return this;
   }
 
-  public ConnectUserResult addDataItem(List<ConnectUser> dataItem) {
+  public ConnectUserResult addDataItem(ConnectUser dataItem) {
     if (this.data == null) {
       this.data = new ArrayList<>();
     }

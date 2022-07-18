@@ -141,7 +141,7 @@ public class StatsResult {
     return this;
   }
 
-  public StatsResult addDataItem(List<StatsByUserInvites> dataItem) {
+  public StatsResult addDataItem(StatsByUserInvites dataItem) {
     if (this.data == null) {
       this.data = new ArrayList<>();
     }

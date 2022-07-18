@@ -141,7 +141,7 @@ public class TagResult {
     return this;
   }
 
-  public TagResult addDataItem(List<TagDetail> dataItem) {
+  public TagResult addDataItem(TagDetail dataItem) {
     if (this.data == null) {
       this.data = new ArrayList<>();
     }

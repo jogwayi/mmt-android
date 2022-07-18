@@ -141,7 +141,7 @@ public class WebhookResult {
     return this;
   }
 
-  public WebhookResult addDataItem(List<WebhookResultItem> dataItem) {
+  public WebhookResult addDataItem(WebhookResultItem dataItem) {
     if (this.data == null) {
       this.data = new ArrayList<>();
     }
