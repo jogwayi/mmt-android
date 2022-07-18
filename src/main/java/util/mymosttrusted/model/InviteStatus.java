@@ -42,7 +42,7 @@ import util.mymosttrusted.api.JSON;
 /**
  * InviteStatus
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-07-18T09:33:18.403887+03:00[Africa/Nairobi]")
+
 public class InviteStatus {
   public static final String SERIALIZED_NAME_STATUS_NAME = "status_name";
   @SerializedName(SERIALIZED_NAME_STATUS_NAME)

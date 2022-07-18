@@ -45,7 +45,7 @@ import util.mymosttrusted.api.JSON;
 /**
  * TrackingLinkDetailResult
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-07-18T09:33:18.403887+03:00[Africa/Nairobi]")
+
 public class TrackingLinkDetailResult {
   public static final String SERIALIZED_NAME_TOTAL = "total";
   @SerializedName(SERIALIZED_NAME_TOTAL)

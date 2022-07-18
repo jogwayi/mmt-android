@@ -46,7 +46,7 @@ import util.mymosttrusted.api.JSON;
 /**
  * StatsByUserInvites
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-07-18T09:33:18.403887+03:00[Africa/Nairobi]")
+
 public class StatsByUserInvites {
   public static final String SERIALIZED_NAME_USER_ID = "user_id";
   @SerializedName(SERIALIZED_NAME_USER_ID)

@@ -42,7 +42,7 @@ import util.mymosttrusted.api.JSON;
 /**
  * PhoneItem
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-07-18T09:33:18.403887+03:00[Africa/Nairobi]")
+
 public class PhoneItem {
   public static final String SERIALIZED_NAME_PHONE_TYPE = "phone_type";
   @SerializedName(SERIALIZED_NAME_PHONE_TYPE)

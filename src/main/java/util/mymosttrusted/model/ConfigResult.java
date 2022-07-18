@@ -43,7 +43,7 @@ import util.mymosttrusted.api.JSON;
 /**
  * ConfigResult
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-07-18T09:33:18.403887+03:00[Africa/Nairobi]")
+
 public class ConfigResult {
   public static final String SERIALIZED_NAME_NETWORK_ID = "network_id";
   @SerializedName(SERIALIZED_NAME_NETWORK_ID)

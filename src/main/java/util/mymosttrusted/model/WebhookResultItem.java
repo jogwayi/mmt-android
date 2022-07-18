@@ -43,7 +43,7 @@ import util.mymosttrusted.api.JSON;
 /**
  * WebhookResultItem
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-07-18T09:33:18.403887+03:00[Africa/Nairobi]")
+
 public class WebhookResultItem {
   public static final String SERIALIZED_NAME_WEBHOOK_ID = "webhook_id";
   @SerializedName(SERIALIZED_NAME_WEBHOOK_ID)
