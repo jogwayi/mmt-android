@@ -11,7 +11,7 @@ package util.mymosttrusted.api;
 import java.util.Map;
 import java.util.List;
 
-import javax.ws.rs.core.GenericType;
+
 
 /**
  * <p>ApiException class.</p>
