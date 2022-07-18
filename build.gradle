@@ -1,8 +1,5 @@
 group = 'util.mymosttrusted'
 version = '1.0.0'
-plugins {
-    id 'com.android.library'
-}
 buildscript {
     repositories {
         mavenLocal()

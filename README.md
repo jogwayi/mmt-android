@@ -64,7 +64,7 @@ Please follow the [installation](#installation) instruction and execute the foll
 
 ```java
 
-// Import classes:
+// Import classes:$$
 import util.mymosttrusted.api.ApiClient;
 import util.mymosttrusted.api.ApiException;
 import util.mymosttrusted.api.Configuration;
