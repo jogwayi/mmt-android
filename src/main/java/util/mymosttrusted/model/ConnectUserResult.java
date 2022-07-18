@@ -61,7 +61,7 @@ public class ConnectUserResult {
 
   public static final String SERIALIZED_NAME_DATA = "data";
   @SerializedName(SERIALIZED_NAME_DATA)
-  private List<List<ConnectUser>> data = null;
+  private List<ConnectUser> data = null;
 
   public ConnectUserResult() { 
   }
@@ -135,7 +135,7 @@ public class ConnectUserResult {
   }
 
 
-  public ConnectUserResult data(List<List<ConnectUser>> data) {
+  public ConnectUserResult data(List<ConnectUser> data) {
     
     this.data = data;
     return this;
@@ -156,12 +156,12 @@ public class ConnectUserResult {
   @javax.annotation.Nullable
   @ApiModelProperty(value = "")
 
-  public List<List<ConnectUser>> getData() {
+  public List<ConnectUser> getData() {
     return data;
   }
 
 
-  public void setData(List<List<ConnectUser>> data) {
+  public void setData(List<ConnectUser> data) {
     this.data = data;
   }
 

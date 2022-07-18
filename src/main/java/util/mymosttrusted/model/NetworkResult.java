@@ -61,7 +61,7 @@ public class NetworkResult {
 
   public static final String SERIALIZED_NAME_DATA = "data";
   @SerializedName(SERIALIZED_NAME_DATA)
-  private List<List<Network>> data = null;
+  private List<Network> data = null;
 
   public NetworkResult() { 
   }
@@ -135,7 +135,7 @@ public class NetworkResult {
   }
 
 
-  public NetworkResult data(List<List<Network>> data) {
+  public NetworkResult data(List<Network> data) {
     
     this.data = data;
     return this;
@@ -156,12 +156,12 @@ public class NetworkResult {
   @javax.annotation.Nullable
   @ApiModelProperty(value = "")
 
-  public List<List<Network>> getData() {
+  public List<Network> getData() {
     return data;
   }
 
 
-  public void setData(List<List<Network>> data) {
+  public void setData(List<Network> data) {
     this.data = data;
   }
 

@@ -61,7 +61,7 @@ public class TrackingLinkDetailResult {
 
   public static final String SERIALIZED_NAME_DATA = "data";
   @SerializedName(SERIALIZED_NAME_DATA)
-  private List<List<TrackingLinkDetail>> data = null;
+  private List<TrackingLinkDetail> data = null;
 
   public TrackingLinkDetailResult() { 
   }
@@ -135,7 +135,7 @@ public class TrackingLinkDetailResult {
   }
 
 
-  public TrackingLinkDetailResult data(List<List<TrackingLinkDetail>> data) {
+  public TrackingLinkDetailResult data(List<TrackingLinkDetail> data) {
     
     this.data = data;
     return this;
@@ -156,12 +156,12 @@ public class TrackingLinkDetailResult {
   @javax.annotation.Nullable
   @ApiModelProperty(value = "")
 
-  public List<List<TrackingLinkDetail>> getData() {
+  public List<TrackingLinkDetail> getData() {
     return data;
   }
 
 
-  public void setData(List<List<TrackingLinkDetail>> data) {
+  public void setData(List<TrackingLinkDetail> data) {
     this.data = data;
   }
 

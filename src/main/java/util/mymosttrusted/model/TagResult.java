@@ -61,7 +61,7 @@ public class TagResult {
 
   public static final String SERIALIZED_NAME_DATA = "data";
   @SerializedName(SERIALIZED_NAME_DATA)
-  private List<List<TagDetail>> data = null;
+  private List<TagDetail> data = null;
 
   public TagResult() { 
   }
@@ -135,7 +135,7 @@ public class TagResult {
   }
 
 
-  public TagResult data(List<List<TagDetail>> data) {
+  public TagResult data(List<TagDetail> data) {
     
     this.data = data;
     return this;
@@ -156,12 +156,12 @@ public class TagResult {
   @javax.annotation.Nullable
   @ApiModelProperty(value = "")
 
-  public List<List<TagDetail>> getData() {
+  public List<TagDetail> getData() {
     return data;
   }
 
 
-  public void setData(List<List<TagDetail>> data) {
+  public void setData(List<TagDetail> data) {
     this.data = data;
   }
 

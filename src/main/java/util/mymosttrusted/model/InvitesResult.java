@@ -61,7 +61,7 @@ public class InvitesResult {
 
   public static final String SERIALIZED_NAME_DATA = "data";
   @SerializedName(SERIALIZED_NAME_DATA)
-  private List<List<Invite>> data = null;
+  private List<Invite> data = null;
 
   public InvitesResult() { 
   }
@@ -135,7 +135,7 @@ public class InvitesResult {
   }
 
 
-  public InvitesResult data(List<List<Invite>> data) {
+  public InvitesResult data(List<Invite> data) {
     
     this.data = data;
     return this;
@@ -156,12 +156,12 @@ public class InvitesResult {
   @javax.annotation.Nullable
   @ApiModelProperty(value = "")
 
-  public List<List<Invite>> getData() {
+  public List<Invite> getData() {
     return data;
   }
 
 
-  public void setData(List<List<Invite>> data) {
+  public void setData(List<Invite> data) {
     this.data = data;
   }
 

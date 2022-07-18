@@ -61,7 +61,7 @@ public class WebhookResult {
 
   public static final String SERIALIZED_NAME_DATA = "data";
   @SerializedName(SERIALIZED_NAME_DATA)
-  private List<List<WebhookResultItem>> data = null;
+  private List<WebhookResultItem> data = null;
 
   public WebhookResult() { 
   }
@@ -135,7 +135,7 @@ public class WebhookResult {
   }
 
 
-  public WebhookResult data(List<List<WebhookResultItem>> data) {
+  public WebhookResult data(List<WebhookResultItem> data) {
     
     this.data = data;
     return this;
@@ -156,12 +156,12 @@ public class WebhookResult {
   @javax.annotation.Nullable
   @ApiModelProperty(value = "")
 
-  public List<List<WebhookResultItem>> getData() {
+  public List<WebhookResultItem> getData() {
     return data;
   }
 
 
-  public void setData(List<List<WebhookResultItem>> data) {
+  public void setData(List<WebhookResultItem> data) {
     this.data = data;
   }
 
