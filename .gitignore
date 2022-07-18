@@ -40,3 +40,4 @@ captures/
 .idea
 .gradle
 .openapi-generator
+target

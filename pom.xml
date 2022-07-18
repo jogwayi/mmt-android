@@ -1,6 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <modelVersion>1.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
     <groupId>util.mymosttrusted</groupId>
     <artifactId>mymosttrusted-reports</artifactId>
     <packaging>jar</packaging>
@@ -38,6 +38,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
                     <fork>true</fork>
                     <meminitial>128m</meminitial>
                     <maxmem>512m</maxmem>
@@ -291,6 +293,11 @@
             <version>${mockito-core-version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.google.android</groupId>
+            <artifactId>android</artifactId>
+            <version>${android-platform-version}</version>
+        </dependency>
     </dependencies>
     <properties>
         <java.version>1.8</java.version>
@@ -309,5 +316,6 @@
         <javax.ws.rs-api-version>2.1.1</javax.ws.rs-api-version>
         <jsr311-api-version>1.1.1</jsr311-api-version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <android-platform-version>4.1.1.4</android-platform-version>
     </properties>
 </project>
