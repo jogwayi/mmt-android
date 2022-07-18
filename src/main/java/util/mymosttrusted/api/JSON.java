@@ -1,8 +1,9 @@
-/*
-  MMT reports API
-  MMT reports API documentation.
- 
-  Do not edit the class manually.
+/**
+  * @author Josephat Ogwayi <jogwayi@gmail.com>
+  * MMT reports API
+ * MMT reports API documentation.
+ *
+ * Do not edit the class manually.
  */
 
 
@@ -35,7 +36,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.HashMap;
 
-/*
+/**
+  * @author Josephat Ogwayi <jogwayi@gmail.com>
  * A JSON utility class
  *
  * NOTE: in the future, this class may be converted to static, which may break

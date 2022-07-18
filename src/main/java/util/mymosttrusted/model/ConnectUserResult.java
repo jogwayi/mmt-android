@@ -1,8 +1,8 @@
-/*
-  MMT reports API
-  MMT reports API documentation.
- 
-  Do not edit the class manually.
+/**
+  * @author Josephat Ogwayi <jogwayi@gmail.com>* MMT reports API
+ * MMT reports API documentation.
+ *
+ * Do not edit the class manually.
  */
 
 

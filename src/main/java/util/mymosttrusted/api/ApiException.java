@@ -1,8 +1,8 @@
-/*
-  MMT reports API
-  MMT reports API documentation.
- 
-  Do not edit the class manually.
+/**
+ * ApiException* MMT reports API
+ * MMT reports API documentation.
+ *
+ * Do not edit the class manually.
  */
 
 

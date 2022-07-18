@@ -1,8 +1,9 @@
-/*
-  MMT reports API
-  MMT reports API documentation.
- 
-  Do not edit the class manually.
+/**
+ * ApiResponse
+ * MMT reports API
+ * MMT reports API documentation.
+ *
+ * Do not edit the class manually.
  */
 
 
