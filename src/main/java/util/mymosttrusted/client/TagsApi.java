@@ -1,360 +1,463 @@
-/**
- * MMT reports API
- * MMT reports API documentation.
- *
- * Do not edit the class manually.
+/*
+  MMT reports API
+  MMT reports API documentation.
+ 
+  Do not edit the class manually.
  */
+
 
 package util.mymosttrusted.client;
 
-import util.mymosttrusted.api.ApiInvoker;
+import util.mymosttrusted.api.ApiCallback;
+import util.mymosttrusted.api.ApiClient;
 import util.mymosttrusted.api.ApiException;
+import util.mymosttrusted.api.ApiResponse;
+import util.mymosttrusted.api.Configuration;
 import util.mymosttrusted.api.Pair;
+import util.mymosttrusted.api.ProgressRequestBody;
+import util.mymosttrusted.api.ProgressResponseBody;
 
-import util.mymosttrusted.model.*;
+import com.google.gson.reflect.TypeToken;
 
-import java.util.*;
+import java.io.IOException;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 
 import util.mymosttrusted.model.TagResult;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
-
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeoutException;
+import javax.ws.rs.core.GenericType;
 
 public class TagsApi {
-  String basePath = "https://api.mymosttrusted.net/v1";
-  ApiInvoker apiInvoker = ApiInvoker.getInstance();
+    private ApiClient localVarApiClient;
+    private int localHostIndex;
+    private String localCustomBaseUrl;
 
-  public void addHeader(String key, String value) {
-    getInvoker().addDefaultHeader(key, value);
-  }
-
-  public ApiInvoker getInvoker() {
-    return apiInvoker;
-  }
-
-  public void setBasePath(String basePath) {
-    this.basePath = basePath;
-  }
-
-  public String getBasePath() {
-    return basePath;
-  }
-
-  /**
-  * Get detailed tags list logged for the network with id {id}
-  * Returns a list of tags logged for the network with id {id}
-   * @param networkId Network ID for the stats
-   * @param page Page to fetch
-   * @param limit Number of records to return per page, maximum allowed number is 50
-   * @param liUserId Get tags specific to an invite li_user_id
-   * @param firstName Get tags specific to an invite first name
-   * @param lastName Get tags specific to an invite last name
-   * @param tagName Get tags specific to this tag name
-   * @param fromDate Get to tags created from this date onwards
-   * @return TagResult
-  */
-  public TagResult getNetworkTag (Integer networkId, Integer page, Integer limit, String liUserId, String firstName, String lastName, String tagName, String fromDate) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
-    Object postBody = null;
-    // verify the required parameter 'networkId' is set
-    if (networkId == null) {
-      VolleyError error = new VolleyError("Missing the required parameter 'networkId' when calling getNetworkTag",
-        new ApiException(400, "Missing the required parameter 'networkId' when calling getNetworkTag"));
+    public TagsApi() {
+        this(Configuration.getDefaultApiClient());
     }
 
-    // create path and map variables
-    String path = "/network/{network_id}/tags".replaceAll("\\{" + "network_id" + "\\}", apiInvoker.escapeString(networkId.toString()));
-
-    // query params
-    List<Pair> queryParams = new ArrayList<Pair>();
-    // header params
-    Map<String, String> headerParams = new HashMap<String, String>();
-    // form params
-    Map<String, String> formParams = new HashMap<String, String>();
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "page", page));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "limit", limit));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "li_user_id", liUserId));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "first_name", firstName));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "last_name", lastName));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "tag_name", tagName));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "from_date", fromDate));
-    String[] contentTypes = {
-    };
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-
-    if (contentType.startsWith("multipart/form-data")) {
-      // file uploading
-      MultipartEntityBuilder localVarBuilder = MultipartEntityBuilder.create();
-      HttpEntity httpEntity = localVarBuilder.build();
-      postBody = httpEntity;
-    } else {
-      // normal form params
+    public TagsApi(ApiClient apiClient) {
+        this.localVarApiClient = apiClient;
     }
 
-    String[] authNames = new String[] { "ApiKeyAuth" };
+    public ApiClient getApiClient() {
+        return localVarApiClient;
+    }
 
-    try {
-      String localVarResponse = apiInvoker.invokeAPI (basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, authNames);
-      if (localVarResponse != null) {
-         return (TagResult) ApiInvoker.deserialize(localVarResponse, "", TagResult.class);
-      } else {
-         return null;
-      }
-    } catch (ApiException ex) {
-       throw ex;
-    } catch (InterruptedException ex) {
-       throw ex;
-    } catch (ExecutionException ex) {
-      if (ex.getCause() instanceof VolleyError) {
-        VolleyError volleyError = (VolleyError)ex.getCause();
-        if (volleyError.networkResponse != null) {
-          throw new ApiException(volleyError.networkResponse.statusCode, volleyError.getMessage());
+    public void setApiClient(ApiClient apiClient) {
+        this.localVarApiClient = apiClient;
+    }
+
+    public int getHostIndex() {
+        return localHostIndex;
+    }
+
+    public void setHostIndex(int hostIndex) {
+        this.localHostIndex = hostIndex;
+    }
+
+    public String getCustomBaseUrl() {
+        return localCustomBaseUrl;
+    }
+
+    public void setCustomBaseUrl(String customBaseUrl) {
+        this.localCustomBaseUrl = customBaseUrl;
+    }
+
+    /**
+     * Build call for getNetworkTag
+     * @param networkId Network ID for the stats (required)
+     * @param page Page to fetch (optional, default to 1)
+     * @param limit Number of records to return per page, maximum allowed number is 50 (optional, default to 50)
+     * @param liUserId Get tags specific to an invite li_user_id (optional)
+     * @param firstName Get tags specific to an invite first name (optional)
+     * @param lastName Get tags specific to an invite last name (optional)
+     * @param tagName Get tags specific to this tag name (optional)
+     * @param fromDate Get to tags created from this date onwards (optional)
+     * @param _callback Callback for upload/download progress
+     * @return Call to execute
+     * @throws ApiException If fail to serialize the request body object
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> A List of tags </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Your request was made with invalid credentials. </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> You&#39;re not supposed to access this resource. </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call getNetworkTagCall(Integer networkId, Integer page, Integer limit, String liUserId, String firstName, String lastName, String tagName, String fromDate, final ApiCallback _callback) throws ApiException {
+        String basePath = null;
+        // Operation Servers
+        String[] localBasePaths = new String[] {  };
+
+        // Determine Base Path to Use
+        if (localCustomBaseUrl != null){
+            basePath = localCustomBaseUrl;
+        } else if ( localBasePaths.length > 0 ) {
+            basePath = localBasePaths[localHostIndex];
+        } else {
+            basePath = null;
         }
-      }
-      throw ex;
-    } catch (TimeoutException ex) {
-      throw ex;
-    }
-  }
 
-      /**
-   * Get detailed tags list logged for the network with id {id}
-   * Returns a list of tags logged for the network with id {id}
-   * @param networkId Network ID for the stats   * @param page Page to fetch   * @param limit Number of records to return per page, maximum allowed number is 50   * @param liUserId Get tags specific to an invite li_user_id   * @param firstName Get tags specific to an invite first name   * @param lastName Get tags specific to an invite last name   * @param tagName Get tags specific to this tag name   * @param fromDate Get to tags created from this date onwards
-  */
-  public void getNetworkTag (Integer networkId, Integer page, Integer limit, String liUserId, String firstName, String lastName, String tagName, String fromDate, final Response.Listener<TagResult> responseListener, final Response.ErrorListener errorListener) {
-    Object postBody = null;
+        Object localVarPostBody = null;
 
-    // verify the required parameter 'networkId' is set
-    if (networkId == null) {
-      VolleyError error = new VolleyError("Missing the required parameter 'networkId' when calling getNetworkTag",
-        new ApiException(400, "Missing the required parameter 'networkId' when calling getNetworkTag"));
-    }
+        // create path and map variables
+        String localVarPath = "/network/{network_id}/tags"
+            .replaceAll("\\{" + "network_id" + "\\}", localVarApiClient.escapeString(networkId.toString()));
 
-    // create path and map variables
-    String path = "/network/{network_id}/tags".replaceAll("\\{format\\}","json").replaceAll("\\{" + "network_id" + "\\}", apiInvoker.escapeString(networkId.toString()));
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+        Map<String, String> localVarCookieParams = new HashMap<String, String>();
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
-    // query params
-    List<Pair> queryParams = new ArrayList<Pair>();
-    // header params
-    Map<String, String> headerParams = new HashMap<String, String>();
-    // form params
-    Map<String, String> formParams = new HashMap<String, String>();
-
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "page", page));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "limit", limit));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "li_user_id", liUserId));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "first_name", firstName));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "last_name", lastName));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "tag_name", tagName));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "from_date", fromDate));
-
-
-    String[] contentTypes = {
-      
-    };
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-
-    if (contentType.startsWith("multipart/form-data")) {
-      // file uploading
-      MultipartEntityBuilder localVarBuilder = MultipartEntityBuilder.create();
-      
-
-      HttpEntity httpEntity = localVarBuilder.build();
-      postBody = httpEntity;
-    } else {
-      // normal form params
-          }
-
-    String[] authNames = new String[] { "ApiKeyAuth" };
-
-    try {
-      apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, authNames,
-        new Response.Listener<String>() {
-          @Override
-          public void onResponse(String localVarResponse) {
-            try {
-              responseListener.onResponse((TagResult) ApiInvoker.deserialize(localVarResponse,  "", TagResult.class));
-            } catch (ApiException exception) {
-               errorListener.onErrorResponse(new VolleyError(exception));
-            }
-          }
-      }, new Response.ErrorListener() {
-          @Override
-          public void onErrorResponse(VolleyError error) {
-            errorListener.onErrorResponse(error);
-          }
-      });
-    } catch (ApiException ex) {
-      errorListener.onErrorResponse(new VolleyError(ex));
-    }
-  }
-  /**
-  * Get detailed tags list logged for the by user with linkedin id li_user_id
-  * Returns a list of tags logged for the by user with linkedin id li_user_id
-   * @param networkId Network ID for the stats
-   * @param userId LinkedIn identifier for the user in case of a specific user stats
-   * @param page Page to fetch
-   * @param limit Number of records to return per page, maximum allowed number is 50
-   * @param liUserId Get tags specific to an invite li_user_id
-   * @param firstName Get tags specific to an invite first name
-   * @param lastName Get tags specific to an invite last name
-   * @param tagName Get tags specific to an invite name
-   * @param fromDate Get to tags created from this date onwards
-   * @return TagResult
-  */
-  public TagResult getTags (Integer networkId, String userId, Integer page, Integer limit, String liUserId, String firstName, String lastName, String tagName, String fromDate) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
-    Object postBody = null;
-    // verify the required parameter 'networkId' is set
-    if (networkId == null) {
-      VolleyError error = new VolleyError("Missing the required parameter 'networkId' when calling getTags",
-        new ApiException(400, "Missing the required parameter 'networkId' when calling getTags"));
-    }
-    // verify the required parameter 'userId' is set
-    if (userId == null) {
-      VolleyError error = new VolleyError("Missing the required parameter 'userId' when calling getTags",
-        new ApiException(400, "Missing the required parameter 'userId' when calling getTags"));
-    }
-
-    // create path and map variables
-    String path = "/network/{network_id}/tags/{user_id}".replaceAll("\\{" + "network_id" + "\\}", apiInvoker.escapeString(networkId.toString())).replaceAll("\\{" + "user_id" + "\\}", apiInvoker.escapeString(userId.toString()));
-
-    // query params
-    List<Pair> queryParams = new ArrayList<Pair>();
-    // header params
-    Map<String, String> headerParams = new HashMap<String, String>();
-    // form params
-    Map<String, String> formParams = new HashMap<String, String>();
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "page", page));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "limit", limit));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "li_user_id", liUserId));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "first_name", firstName));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "last_name", lastName));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "tag_name", tagName));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "from_date", fromDate));
-    String[] contentTypes = {
-    };
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-
-    if (contentType.startsWith("multipart/form-data")) {
-      // file uploading
-      MultipartEntityBuilder localVarBuilder = MultipartEntityBuilder.create();
-      HttpEntity httpEntity = localVarBuilder.build();
-      postBody = httpEntity;
-    } else {
-      // normal form params
-    }
-
-    String[] authNames = new String[] { "ApiKeyAuth" };
-
-    try {
-      String localVarResponse = apiInvoker.invokeAPI (basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, authNames);
-      if (localVarResponse != null) {
-         return (TagResult) ApiInvoker.deserialize(localVarResponse, "", TagResult.class);
-      } else {
-         return null;
-      }
-    } catch (ApiException ex) {
-       throw ex;
-    } catch (InterruptedException ex) {
-       throw ex;
-    } catch (ExecutionException ex) {
-      if (ex.getCause() instanceof VolleyError) {
-        VolleyError volleyError = (VolleyError)ex.getCause();
-        if (volleyError.networkResponse != null) {
-          throw new ApiException(volleyError.networkResponse.statusCode, volleyError.getMessage());
+        if (page != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("page", page));
         }
-      }
-      throw ex;
-    } catch (TimeoutException ex) {
-      throw ex;
+
+        if (limit != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("limit", limit));
+        }
+
+        if (liUserId != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("li_user_id", liUserId));
+        }
+
+        if (firstName != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("first_name", firstName));
+        }
+
+        if (lastName != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("last_name", lastName));
+        }
+
+        if (tagName != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("tag_name", tagName));
+        }
+
+        if (fromDate != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("from_date", fromDate));
+        }
+
+        final String[] localVarAccepts = {
+            "application/json"
+        };
+        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) {
+            localVarHeaderParams.put("Accept", localVarAccept);
+        }
+
+        final String[] localVarContentTypes = {
+            
+        };
+        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
+        if (localVarContentType != null) {
+            localVarHeaderParams.put("Content-Type", localVarContentType);
+        }
+
+        String[] localVarAuthNames = new String[] { "ApiKeyAuth" };
+        return localVarApiClient.buildCall(basePath, localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
-  }
 
-      /**
-   * Get detailed tags list logged for the by user with linkedin id li_user_id
-   * Returns a list of tags logged for the by user with linkedin id li_user_id
-   * @param networkId Network ID for the stats   * @param userId LinkedIn identifier for the user in case of a specific user stats   * @param page Page to fetch   * @param limit Number of records to return per page, maximum allowed number is 50   * @param liUserId Get tags specific to an invite li_user_id   * @param firstName Get tags specific to an invite first name   * @param lastName Get tags specific to an invite last name   * @param tagName Get tags specific to an invite name   * @param fromDate Get to tags created from this date onwards
-  */
-  public void getTags (Integer networkId, String userId, Integer page, Integer limit, String liUserId, String firstName, String lastName, String tagName, String fromDate, final Response.Listener<TagResult> responseListener, final Response.ErrorListener errorListener) {
-    Object postBody = null;
+    @SuppressWarnings("rawtypes")
+    private okhttp3.Call getNetworkTagValidateBeforeCall(Integer networkId, Integer page, Integer limit, String liUserId, String firstName, String lastName, String tagName, String fromDate, final ApiCallback _callback) throws ApiException {
+        
+        // verify the required parameter 'networkId' is set
+        if (networkId == null) {
+            throw new ApiException("Missing the required parameter 'networkId' when calling getNetworkTag(Async)");
+        }
+        
 
-    // verify the required parameter 'networkId' is set
-    if (networkId == null) {
-      VolleyError error = new VolleyError("Missing the required parameter 'networkId' when calling getTags",
-        new ApiException(400, "Missing the required parameter 'networkId' when calling getTags"));
-    }
-    // verify the required parameter 'userId' is set
-    if (userId == null) {
-      VolleyError error = new VolleyError("Missing the required parameter 'userId' when calling getTags",
-        new ApiException(400, "Missing the required parameter 'userId' when calling getTags"));
+        okhttp3.Call localVarCall = getNetworkTagCall(networkId, page, limit, liUserId, firstName, lastName, tagName, fromDate, _callback);
+        return localVarCall;
+
     }
 
-    // create path and map variables
-    String path = "/network/{network_id}/tags/{user_id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "network_id" + "\\}", apiInvoker.escapeString(networkId.toString())).replaceAll("\\{" + "user_id" + "\\}", apiInvoker.escapeString(userId.toString()));
-
-    // query params
-    List<Pair> queryParams = new ArrayList<Pair>();
-    // header params
-    Map<String, String> headerParams = new HashMap<String, String>();
-    // form params
-    Map<String, String> formParams = new HashMap<String, String>();
-
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "page", page));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "limit", limit));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "li_user_id", liUserId));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "first_name", firstName));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "last_name", lastName));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "tag_name", tagName));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "from_date", fromDate));
-
-
-    String[] contentTypes = {
-      
-    };
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-
-    if (contentType.startsWith("multipart/form-data")) {
-      // file uploading
-      MultipartEntityBuilder localVarBuilder = MultipartEntityBuilder.create();
-      
-
-      HttpEntity httpEntity = localVarBuilder.build();
-      postBody = httpEntity;
-    } else {
-      // normal form params
-          }
-
-    String[] authNames = new String[] { "ApiKeyAuth" };
-
-    try {
-      apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, authNames,
-        new Response.Listener<String>() {
-          @Override
-          public void onResponse(String localVarResponse) {
-            try {
-              responseListener.onResponse((TagResult) ApiInvoker.deserialize(localVarResponse,  "", TagResult.class));
-            } catch (ApiException exception) {
-               errorListener.onErrorResponse(new VolleyError(exception));
-            }
-          }
-      }, new Response.ErrorListener() {
-          @Override
-          public void onErrorResponse(VolleyError error) {
-            errorListener.onErrorResponse(error);
-          }
-      });
-    } catch (ApiException ex) {
-      errorListener.onErrorResponse(new VolleyError(ex));
+    /**
+     * Get detailed tags list logged for the network with id {id}
+     * Returns a list of tags logged for the network with id {id}
+     * @param networkId Network ID for the stats (required)
+     * @param page Page to fetch (optional, default to 1)
+     * @param limit Number of records to return per page, maximum allowed number is 50 (optional, default to 50)
+     * @param liUserId Get tags specific to an invite li_user_id (optional)
+     * @param firstName Get tags specific to an invite first name (optional)
+     * @param lastName Get tags specific to an invite last name (optional)
+     * @param tagName Get tags specific to this tag name (optional)
+     * @param fromDate Get to tags created from this date onwards (optional)
+     * @return TagResult
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> A List of tags </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Your request was made with invalid credentials. </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> You&#39;re not supposed to access this resource. </td><td>  -  </td></tr>
+     </table>
+     */
+    public TagResult getNetworkTag(Integer networkId, Integer page, Integer limit, String liUserId, String firstName, String lastName, String tagName, String fromDate) throws ApiException {
+        ApiResponse<TagResult> localVarResp = getNetworkTagWithHttpInfo(networkId, page, limit, liUserId, firstName, lastName, tagName, fromDate);
+        return localVarResp.getData();
     }
-  }
+
+    /**
+     * Get detailed tags list logged for the network with id {id}
+     * Returns a list of tags logged for the network with id {id}
+     * @param networkId Network ID for the stats (required)
+     * @param page Page to fetch (optional, default to 1)
+     * @param limit Number of records to return per page, maximum allowed number is 50 (optional, default to 50)
+     * @param liUserId Get tags specific to an invite li_user_id (optional)
+     * @param firstName Get tags specific to an invite first name (optional)
+     * @param lastName Get tags specific to an invite last name (optional)
+     * @param tagName Get tags specific to this tag name (optional)
+     * @param fromDate Get to tags created from this date onwards (optional)
+     * @return ApiResponse&lt;TagResult&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> A List of tags </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Your request was made with invalid credentials. </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> You&#39;re not supposed to access this resource. </td><td>  -  </td></tr>
+     </table>
+     */
+    public ApiResponse<TagResult> getNetworkTagWithHttpInfo(Integer networkId, Integer page, Integer limit, String liUserId, String firstName, String lastName, String tagName, String fromDate) throws ApiException {
+        okhttp3.Call localVarCall = getNetworkTagValidateBeforeCall(networkId, page, limit, liUserId, firstName, lastName, tagName, fromDate, null);
+        Type localVarReturnType = new TypeToken<TagResult>(){}.getType();
+        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    }
+
+    /**
+     * Get detailed tags list logged for the network with id {id} (asynchronously)
+     * Returns a list of tags logged for the network with id {id}
+     * @param networkId Network ID for the stats (required)
+     * @param page Page to fetch (optional, default to 1)
+     * @param limit Number of records to return per page, maximum allowed number is 50 (optional, default to 50)
+     * @param liUserId Get tags specific to an invite li_user_id (optional)
+     * @param firstName Get tags specific to an invite first name (optional)
+     * @param lastName Get tags specific to an invite last name (optional)
+     * @param tagName Get tags specific to this tag name (optional)
+     * @param fromDate Get to tags created from this date onwards (optional)
+     * @param _callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> A List of tags </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Your request was made with invalid credentials. </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> You&#39;re not supposed to access this resource. </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call getNetworkTagAsync(Integer networkId, Integer page, Integer limit, String liUserId, String firstName, String lastName, String tagName, String fromDate, final ApiCallback<TagResult> _callback) throws ApiException {
+
+        okhttp3.Call localVarCall = getNetworkTagValidateBeforeCall(networkId, page, limit, liUserId, firstName, lastName, tagName, fromDate, _callback);
+        Type localVarReturnType = new TypeToken<TagResult>(){}.getType();
+        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
+        return localVarCall;
+    }
+    /**
+     * Build call for getTags
+     * @param networkId Network ID for the stats (required)
+     * @param userId LinkedIn identifier for the user in case of a specific user stats (required)
+     * @param page Page to fetch (optional, default to 1)
+     * @param limit Number of records to return per page, maximum allowed number is 50 (optional, default to 50)
+     * @param liUserId Get tags specific to an invite li_user_id (optional)
+     * @param firstName Get tags specific to an invite first name (optional)
+     * @param lastName Get tags specific to an invite last name (optional)
+     * @param tagName Get tags specific to an invite name (optional)
+     * @param fromDate Get to tags created from this date onwards (optional)
+     * @param _callback Callback for upload/download progress
+     * @return Call to execute
+     * @throws ApiException If fail to serialize the request body object
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> A List of tags </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Your request was made with invalid credentials. </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> You&#39;re not supposed to access this resource. </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call getTagsCall(Integer networkId, String userId, Integer page, Integer limit, String liUserId, String firstName, String lastName, String tagName, String fromDate, final ApiCallback _callback) throws ApiException {
+        String basePath = null;
+        // Operation Servers
+        String[] localBasePaths = new String[] {  };
+
+        // Determine Base Path to Use
+        if (localCustomBaseUrl != null){
+            basePath = localCustomBaseUrl;
+        } else if ( localBasePaths.length > 0 ) {
+            basePath = localBasePaths[localHostIndex];
+        } else {
+            basePath = null;
+        }
+
+        Object localVarPostBody = null;
+
+        // create path and map variables
+        String localVarPath = "/network/{network_id}/tags/{user_id}"
+            .replaceAll("\\{" + "network_id" + "\\}", localVarApiClient.escapeString(networkId.toString()))
+            .replaceAll("\\{" + "user_id" + "\\}", localVarApiClient.escapeString(userId.toString()));
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+        Map<String, String> localVarCookieParams = new HashMap<String, String>();
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+        if (page != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("page", page));
+        }
+
+        if (limit != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("limit", limit));
+        }
+
+        if (liUserId != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("li_user_id", liUserId));
+        }
+
+        if (firstName != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("first_name", firstName));
+        }
+
+        if (lastName != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("last_name", lastName));
+        }
+
+        if (tagName != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("tag_name", tagName));
+        }
+
+        if (fromDate != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("from_date", fromDate));
+        }
+
+        final String[] localVarAccepts = {
+            "application/json"
+        };
+        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) {
+            localVarHeaderParams.put("Accept", localVarAccept);
+        }
+
+        final String[] localVarContentTypes = {
+            
+        };
+        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
+        if (localVarContentType != null) {
+            localVarHeaderParams.put("Content-Type", localVarContentType);
+        }
+
+        String[] localVarAuthNames = new String[] { "ApiKeyAuth" };
+        return localVarApiClient.buildCall(basePath, localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+    }
+
+    @SuppressWarnings("rawtypes")
+    private okhttp3.Call getTagsValidateBeforeCall(Integer networkId, String userId, Integer page, Integer limit, String liUserId, String firstName, String lastName, String tagName, String fromDate, final ApiCallback _callback) throws ApiException {
+        
+        // verify the required parameter 'networkId' is set
+        if (networkId == null) {
+            throw new ApiException("Missing the required parameter 'networkId' when calling getTags(Async)");
+        }
+        
+        // verify the required parameter 'userId' is set
+        if (userId == null) {
+            throw new ApiException("Missing the required parameter 'userId' when calling getTags(Async)");
+        }
+        
+
+        okhttp3.Call localVarCall = getTagsCall(networkId, userId, page, limit, liUserId, firstName, lastName, tagName, fromDate, _callback);
+        return localVarCall;
+
+    }
+
+    /**
+     * Get detailed tags list logged for the by user with linkedin id li_user_id
+     * Returns a list of tags logged for the by user with linkedin id li_user_id
+     * @param networkId Network ID for the stats (required)
+     * @param userId LinkedIn identifier for the user in case of a specific user stats (required)
+     * @param page Page to fetch (optional, default to 1)
+     * @param limit Number of records to return per page, maximum allowed number is 50 (optional, default to 50)
+     * @param liUserId Get tags specific to an invite li_user_id (optional)
+     * @param firstName Get tags specific to an invite first name (optional)
+     * @param lastName Get tags specific to an invite last name (optional)
+     * @param tagName Get tags specific to an invite name (optional)
+     * @param fromDate Get to tags created from this date onwards (optional)
+     * @return TagResult
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> A List of tags </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Your request was made with invalid credentials. </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> You&#39;re not supposed to access this resource. </td><td>  -  </td></tr>
+     </table>
+     */
+    public TagResult getTags(Integer networkId, String userId, Integer page, Integer limit, String liUserId, String firstName, String lastName, String tagName, String fromDate) throws ApiException {
+        ApiResponse<TagResult> localVarResp = getTagsWithHttpInfo(networkId, userId, page, limit, liUserId, firstName, lastName, tagName, fromDate);
+        return localVarResp.getData();
+    }
+
+    /**
+     * Get detailed tags list logged for the by user with linkedin id li_user_id
+     * Returns a list of tags logged for the by user with linkedin id li_user_id
+     * @param networkId Network ID for the stats (required)
+     * @param userId LinkedIn identifier for the user in case of a specific user stats (required)
+     * @param page Page to fetch (optional, default to 1)
+     * @param limit Number of records to return per page, maximum allowed number is 50 (optional, default to 50)
+     * @param liUserId Get tags specific to an invite li_user_id (optional)
+     * @param firstName Get tags specific to an invite first name (optional)
+     * @param lastName Get tags specific to an invite last name (optional)
+     * @param tagName Get tags specific to an invite name (optional)
+     * @param fromDate Get to tags created from this date onwards (optional)
+     * @return ApiResponse&lt;TagResult&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> A List of tags </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Your request was made with invalid credentials. </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> You&#39;re not supposed to access this resource. </td><td>  -  </td></tr>
+     </table>
+     */
+    public ApiResponse<TagResult> getTagsWithHttpInfo(Integer networkId, String userId, Integer page, Integer limit, String liUserId, String firstName, String lastName, String tagName, String fromDate) throws ApiException {
+        okhttp3.Call localVarCall = getTagsValidateBeforeCall(networkId, userId, page, limit, liUserId, firstName, lastName, tagName, fromDate, null);
+        Type localVarReturnType = new TypeToken<TagResult>(){}.getType();
+        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    }
+
+    /**
+     * Get detailed tags list logged for the by user with linkedin id li_user_id (asynchronously)
+     * Returns a list of tags logged for the by user with linkedin id li_user_id
+     * @param networkId Network ID for the stats (required)
+     * @param userId LinkedIn identifier for the user in case of a specific user stats (required)
+     * @param page Page to fetch (optional, default to 1)
+     * @param limit Number of records to return per page, maximum allowed number is 50 (optional, default to 50)
+     * @param liUserId Get tags specific to an invite li_user_id (optional)
+     * @param firstName Get tags specific to an invite first name (optional)
+     * @param lastName Get tags specific to an invite last name (optional)
+     * @param tagName Get tags specific to an invite name (optional)
+     * @param fromDate Get to tags created from this date onwards (optional)
+     * @param _callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> A List of tags </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Your request was made with invalid credentials. </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> You&#39;re not supposed to access this resource. </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call getTagsAsync(Integer networkId, String userId, Integer page, Integer limit, String liUserId, String firstName, String lastName, String tagName, String fromDate, final ApiCallback<TagResult> _callback) throws ApiException {
+
+        okhttp3.Call localVarCall = getTagsValidateBeforeCall(networkId, userId, page, limit, liUserId, firstName, lastName, tagName, fromDate, _callback);
+        Type localVarReturnType = new TypeToken<TagResult>(){}.getType();
+        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
+        return localVarCall;
+    }
 }

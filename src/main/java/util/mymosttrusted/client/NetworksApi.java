@@ -1,178 +1,220 @@
-/**
- * MMT reports API
- * MMT reports API documentation.
- *
- * Do not edit the class manually.
+/*
+  MMT reports API
+  MMT reports API documentation.
+ 
+  Do not edit the class manually.
  */
+
 
 package util.mymosttrusted.client;
 
-import util.mymosttrusted.api.ApiInvoker;
+import util.mymosttrusted.api.ApiCallback;
+import util.mymosttrusted.api.ApiClient;
 import util.mymosttrusted.api.ApiException;
+import util.mymosttrusted.api.ApiResponse;
+import util.mymosttrusted.api.Configuration;
 import util.mymosttrusted.api.Pair;
+import util.mymosttrusted.api.ProgressRequestBody;
+import util.mymosttrusted.api.ProgressResponseBody;
 
-import util.mymosttrusted.model.*;
+import com.google.gson.reflect.TypeToken;
 
-import java.util.*;
+import java.io.IOException;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 
 import util.mymosttrusted.model.NetworkResult;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
-
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeoutException;
+import javax.ws.rs.core.GenericType;
 
 public class NetworksApi {
-  String basePath = "https://api.mymosttrusted.net/v1";
-  ApiInvoker apiInvoker = ApiInvoker.getInstance();
+    private ApiClient localVarApiClient;
+    private int localHostIndex;
+    private String localCustomBaseUrl;
 
-  public void addHeader(String key, String value) {
-    getInvoker().addDefaultHeader(key, value);
-  }
-
-  public ApiInvoker getInvoker() {
-    return apiInvoker;
-  }
-
-  public void setBasePath(String basePath) {
-    this.basePath = basePath;
-  }
-
-  public String getBasePath() {
-    return basePath;
-  }
-
-  /**
-  * Retrieve a list of networks you can access
-  * 
-   * @param page Page to fetch
-   * @param limit Number of records to return per page, maximum allowed number is 50
-   * @param fromDate Get a list accessible networks created from this date onwards
-   * @return NetworkResult
-  */
-  public NetworkResult getNetwork (Integer page, Integer limit, String fromDate) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
-    Object postBody = null;
-
-    // create path and map variables
-    String path = "/network";
-
-    // query params
-    List<Pair> queryParams = new ArrayList<Pair>();
-    // header params
-    Map<String, String> headerParams = new HashMap<String, String>();
-    // form params
-    Map<String, String> formParams = new HashMap<String, String>();
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "page", page));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "limit", limit));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "from_date", fromDate));
-    String[] contentTypes = {
-    };
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-
-    if (contentType.startsWith("multipart/form-data")) {
-      // file uploading
-      MultipartEntityBuilder localVarBuilder = MultipartEntityBuilder.create();
-      HttpEntity httpEntity = localVarBuilder.build();
-      postBody = httpEntity;
-    } else {
-      // normal form params
+    public NetworksApi() {
+        this(Configuration.getDefaultApiClient());
     }
 
-    String[] authNames = new String[] { "ApiKeyAuth" };
+    public NetworksApi(ApiClient apiClient) {
+        this.localVarApiClient = apiClient;
+    }
 
-    try {
-      String localVarResponse = apiInvoker.invokeAPI (basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, authNames);
-      if (localVarResponse != null) {
-         return (NetworkResult) ApiInvoker.deserialize(localVarResponse, "", NetworkResult.class);
-      } else {
-         return null;
-      }
-    } catch (ApiException ex) {
-       throw ex;
-    } catch (InterruptedException ex) {
-       throw ex;
-    } catch (ExecutionException ex) {
-      if (ex.getCause() instanceof VolleyError) {
-        VolleyError volleyError = (VolleyError)ex.getCause();
-        if (volleyError.networkResponse != null) {
-          throw new ApiException(volleyError.networkResponse.statusCode, volleyError.getMessage());
+    public ApiClient getApiClient() {
+        return localVarApiClient;
+    }
+
+    public void setApiClient(ApiClient apiClient) {
+        this.localVarApiClient = apiClient;
+    }
+
+    public int getHostIndex() {
+        return localHostIndex;
+    }
+
+    public void setHostIndex(int hostIndex) {
+        this.localHostIndex = hostIndex;
+    }
+
+    public String getCustomBaseUrl() {
+        return localCustomBaseUrl;
+    }
+
+    public void setCustomBaseUrl(String customBaseUrl) {
+        this.localCustomBaseUrl = customBaseUrl;
+    }
+
+    /**
+     * Build call for getNetwork
+     * @param page Page to fetch (optional, default to 1)
+     * @param limit Number of records to return per page, maximum allowed number is 50 (optional, default to 50)
+     * @param fromDate Get a list accessible networks created from this date onwards (optional)
+     * @param _callback Callback for upload/download progress
+     * @return Call to execute
+     * @throws ApiException If fail to serialize the request body object
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> A List of networks (id and name) you can access </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Your request was made with invalid credentials. </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> You&#39;re not supposed to access this resource. </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call getNetworkCall(Integer page, Integer limit, String fromDate, final ApiCallback _callback) throws ApiException {
+        String basePath = null;
+        // Operation Servers
+        String[] localBasePaths = new String[] {  };
+
+        // Determine Base Path to Use
+        if (localCustomBaseUrl != null){
+            basePath = localCustomBaseUrl;
+        } else if ( localBasePaths.length > 0 ) {
+            basePath = localBasePaths[localHostIndex];
+        } else {
+            basePath = null;
         }
-      }
-      throw ex;
-    } catch (TimeoutException ex) {
-      throw ex;
+
+        Object localVarPostBody = null;
+
+        // create path and map variables
+        String localVarPath = "/network";
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+        Map<String, String> localVarCookieParams = new HashMap<String, String>();
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+        if (page != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("page", page));
+        }
+
+        if (limit != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("limit", limit));
+        }
+
+        if (fromDate != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("from_date", fromDate));
+        }
+
+        final String[] localVarAccepts = {
+            "application/json"
+        };
+        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) {
+            localVarHeaderParams.put("Accept", localVarAccept);
+        }
+
+        final String[] localVarContentTypes = {
+            
+        };
+        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
+        if (localVarContentType != null) {
+            localVarHeaderParams.put("Content-Type", localVarContentType);
+        }
+
+        String[] localVarAuthNames = new String[] { "ApiKeyAuth" };
+        return localVarApiClient.buildCall(basePath, localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
-  }
 
-      /**
-   * Retrieve a list of networks you can access
-   * 
-   * @param page Page to fetch   * @param limit Number of records to return per page, maximum allowed number is 50   * @param fromDate Get a list accessible networks created from this date onwards
-  */
-  public void getNetwork (Integer page, Integer limit, String fromDate, final Response.Listener<NetworkResult> responseListener, final Response.ErrorListener errorListener) {
-    Object postBody = null;
+    @SuppressWarnings("rawtypes")
+    private okhttp3.Call getNetworkValidateBeforeCall(Integer page, Integer limit, String fromDate, final ApiCallback _callback) throws ApiException {
+        
 
+        okhttp3.Call localVarCall = getNetworkCall(page, limit, fromDate, _callback);
+        return localVarCall;
 
-    // create path and map variables
-    String path = "/network".replaceAll("\\{format\\}","json");
-
-    // query params
-    List<Pair> queryParams = new ArrayList<Pair>();
-    // header params
-    Map<String, String> headerParams = new HashMap<String, String>();
-    // form params
-    Map<String, String> formParams = new HashMap<String, String>();
-
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "page", page));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "limit", limit));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "from_date", fromDate));
-
-
-    String[] contentTypes = {
-      
-    };
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-
-    if (contentType.startsWith("multipart/form-data")) {
-      // file uploading
-      MultipartEntityBuilder localVarBuilder = MultipartEntityBuilder.create();
-      
-
-      HttpEntity httpEntity = localVarBuilder.build();
-      postBody = httpEntity;
-    } else {
-      // normal form params
-          }
-
-    String[] authNames = new String[] { "ApiKeyAuth" };
-
-    try {
-      apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, authNames,
-        new Response.Listener<String>() {
-          @Override
-          public void onResponse(String localVarResponse) {
-            try {
-              responseListener.onResponse((NetworkResult) ApiInvoker.deserialize(localVarResponse,  "", NetworkResult.class));
-            } catch (ApiException exception) {
-               errorListener.onErrorResponse(new VolleyError(exception));
-            }
-          }
-      }, new Response.ErrorListener() {
-          @Override
-          public void onErrorResponse(VolleyError error) {
-            errorListener.onErrorResponse(error);
-          }
-      });
-    } catch (ApiException ex) {
-      errorListener.onErrorResponse(new VolleyError(ex));
     }
-  }
+
+    /**
+     * Retrieve a list of networks you can access
+     * 
+     * @param page Page to fetch (optional, default to 1)
+     * @param limit Number of records to return per page, maximum allowed number is 50 (optional, default to 50)
+     * @param fromDate Get a list accessible networks created from this date onwards (optional)
+     * @return NetworkResult
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> A List of networks (id and name) you can access </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Your request was made with invalid credentials. </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> You&#39;re not supposed to access this resource. </td><td>  -  </td></tr>
+     </table>
+     */
+    public NetworkResult getNetwork(Integer page, Integer limit, String fromDate) throws ApiException {
+        ApiResponse<NetworkResult> localVarResp = getNetworkWithHttpInfo(page, limit, fromDate);
+        return localVarResp.getData();
+    }
+
+    /**
+     * Retrieve a list of networks you can access
+     * 
+     * @param page Page to fetch (optional, default to 1)
+     * @param limit Number of records to return per page, maximum allowed number is 50 (optional, default to 50)
+     * @param fromDate Get a list accessible networks created from this date onwards (optional)
+     * @return ApiResponse&lt;NetworkResult&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> A List of networks (id and name) you can access </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Your request was made with invalid credentials. </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> You&#39;re not supposed to access this resource. </td><td>  -  </td></tr>
+     </table>
+     */
+    public ApiResponse<NetworkResult> getNetworkWithHttpInfo(Integer page, Integer limit, String fromDate) throws ApiException {
+        okhttp3.Call localVarCall = getNetworkValidateBeforeCall(page, limit, fromDate, null);
+        Type localVarReturnType = new TypeToken<NetworkResult>(){}.getType();
+        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    }
+
+    /**
+     * Retrieve a list of networks you can access (asynchronously)
+     * 
+     * @param page Page to fetch (optional, default to 1)
+     * @param limit Number of records to return per page, maximum allowed number is 50 (optional, default to 50)
+     * @param fromDate Get a list accessible networks created from this date onwards (optional)
+     * @param _callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> A List of networks (id and name) you can access </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Your request was made with invalid credentials. </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> You&#39;re not supposed to access this resource. </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call getNetworkAsync(Integer page, Integer limit, String fromDate, final ApiCallback<NetworkResult> _callback) throws ApiException {
+
+        okhttp3.Call localVarCall = getNetworkValidateBeforeCall(page, limit, fromDate, _callback);
+        Type localVarReturnType = new TypeToken<NetworkResult>(){}.getType();
+        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
+        return localVarCall;
+    }
 }

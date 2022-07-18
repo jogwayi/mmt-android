@@ -1,190 +1,215 @@
-/**
- * MMT reports API
- * MMT reports API documentation.
- *
- * Do not edit the class manually.
+/*
+  MMT reports API
+  MMT reports API documentation.
+ 
+  Do not edit the class manually.
  */
+
 
 package util.mymosttrusted.client;
 
-import util.mymosttrusted.api.ApiInvoker;
+import util.mymosttrusted.api.ApiCallback;
+import util.mymosttrusted.api.ApiClient;
 import util.mymosttrusted.api.ApiException;
+import util.mymosttrusted.api.ApiResponse;
+import util.mymosttrusted.api.Configuration;
 import util.mymosttrusted.api.Pair;
+import util.mymosttrusted.api.ProgressRequestBody;
+import util.mymosttrusted.api.ProgressResponseBody;
 
-import util.mymosttrusted.model.*;
+import com.google.gson.reflect.TypeToken;
 
-import java.util.*;
-
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
+import java.io.IOException;
 
 
-import org.apache.http.HttpEntity;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeoutException;
+import javax.ws.rs.core.GenericType;
 
 public class ThumbnailApi {
-  String basePath = "https://api.mymosttrusted.net/v1";
-  ApiInvoker apiInvoker = ApiInvoker.getInstance();
+    private ApiClient localVarApiClient;
+    private int localHostIndex;
+    private String localCustomBaseUrl;
 
-  public void addHeader(String key, String value) {
-    getInvoker().addDefaultHeader(key, value);
-  }
-
-  public ApiInvoker getInvoker() {
-    return apiInvoker;
-  }
-
-  public void setBasePath(String basePath) {
-    this.basePath = basePath;
-  }
-
-  public String getBasePath() {
-    return basePath;
-  }
-
-  /**
-  * Get photo for the user_id specified by thumb_id
-  * Returns a photo for the user_id specified by thumb_id
-   * @param networkId Network ID for the stats
-   * @param thumbnailId LinkedIn identifier related to the thumbnail
-   * @return String
-  */
-  public String getThumbnail (Integer networkId, String thumbnailId) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
-    Object postBody = null;
-    // verify the required parameter 'networkId' is set
-    if (networkId == null) {
-      VolleyError error = new VolleyError("Missing the required parameter 'networkId' when calling getThumbnail",
-        new ApiException(400, "Missing the required parameter 'networkId' when calling getThumbnail"));
-    }
-    // verify the required parameter 'thumbnailId' is set
-    if (thumbnailId == null) {
-      VolleyError error = new VolleyError("Missing the required parameter 'thumbnailId' when calling getThumbnail",
-        new ApiException(400, "Missing the required parameter 'thumbnailId' when calling getThumbnail"));
+    public ThumbnailApi() {
+        this(Configuration.getDefaultApiClient());
     }
 
-    // create path and map variables
-    String path = "/network/{network_id}/thumbnail/{thumbnail_id}".replaceAll("\\{" + "network_id" + "\\}", apiInvoker.escapeString(networkId.toString())).replaceAll("\\{" + "thumbnail_id" + "\\}", apiInvoker.escapeString(thumbnailId.toString()));
-
-    // query params
-    List<Pair> queryParams = new ArrayList<Pair>();
-    // header params
-    Map<String, String> headerParams = new HashMap<String, String>();
-    // form params
-    Map<String, String> formParams = new HashMap<String, String>();
-    String[] contentTypes = {
-    };
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-
-    if (contentType.startsWith("multipart/form-data")) {
-      // file uploading
-      MultipartEntityBuilder localVarBuilder = MultipartEntityBuilder.create();
-      HttpEntity httpEntity = localVarBuilder.build();
-      postBody = httpEntity;
-    } else {
-      // normal form params
+    public ThumbnailApi(ApiClient apiClient) {
+        this.localVarApiClient = apiClient;
     }
 
-    String[] authNames = new String[] { "ApiKeyAuth" };
+    public ApiClient getApiClient() {
+        return localVarApiClient;
+    }
 
-    try {
-      String localVarResponse = apiInvoker.invokeAPI (basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, authNames);
-      if (localVarResponse != null) {
-         return (String) ApiInvoker.deserialize(localVarResponse, "", String.class);
-      } else {
-         return null;
-      }
-    } catch (ApiException ex) {
-       throw ex;
-    } catch (InterruptedException ex) {
-       throw ex;
-    } catch (ExecutionException ex) {
-      if (ex.getCause() instanceof VolleyError) {
-        VolleyError volleyError = (VolleyError)ex.getCause();
-        if (volleyError.networkResponse != null) {
-          throw new ApiException(volleyError.networkResponse.statusCode, volleyError.getMessage());
+    public void setApiClient(ApiClient apiClient) {
+        this.localVarApiClient = apiClient;
+    }
+
+    public int getHostIndex() {
+        return localHostIndex;
+    }
+
+    public void setHostIndex(int hostIndex) {
+        this.localHostIndex = hostIndex;
+    }
+
+    public String getCustomBaseUrl() {
+        return localCustomBaseUrl;
+    }
+
+    public void setCustomBaseUrl(String customBaseUrl) {
+        this.localCustomBaseUrl = customBaseUrl;
+    }
+
+    /**
+     * Build call for getThumbnail
+     * @param networkId Network ID for the stats (required)
+     * @param thumbnailId LinkedIn identifier related to the thumbnail (required)
+     * @param _callback Callback for upload/download progress
+     * @return Call to execute
+     * @throws ApiException If fail to serialize the request body object
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> A List of to connect contacts by user with id li_user_id in this network </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Your request was made with invalid credentials. </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> You&#39;re not supposed to access this resource. </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call getThumbnailCall(Integer networkId, String thumbnailId, final ApiCallback _callback) throws ApiException {
+        String basePath = null;
+        // Operation Servers
+        String[] localBasePaths = new String[] {  };
+
+        // Determine Base Path to Use
+        if (localCustomBaseUrl != null){
+            basePath = localCustomBaseUrl;
+        } else if ( localBasePaths.length > 0 ) {
+            basePath = localBasePaths[localHostIndex];
+        } else {
+            basePath = null;
         }
-      }
-      throw ex;
-    } catch (TimeoutException ex) {
-      throw ex;
+
+        Object localVarPostBody = null;
+
+        // create path and map variables
+        String localVarPath = "/network/{network_id}/thumbnail/{thumbnail_id}"
+            .replaceAll("\\{" + "network_id" + "\\}", localVarApiClient.escapeString(networkId.toString()))
+            .replaceAll("\\{" + "thumbnail_id" + "\\}", localVarApiClient.escapeString(thumbnailId.toString()));
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+        Map<String, String> localVarCookieParams = new HashMap<String, String>();
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+        final String[] localVarAccepts = {
+            "image/png"
+        };
+        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) {
+            localVarHeaderParams.put("Accept", localVarAccept);
+        }
+
+        final String[] localVarContentTypes = {
+            
+        };
+        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
+        if (localVarContentType != null) {
+            localVarHeaderParams.put("Content-Type", localVarContentType);
+        }
+
+        String[] localVarAuthNames = new String[] { "ApiKeyAuth" };
+        return localVarApiClient.buildCall(basePath, localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
-  }
 
-      /**
-   * Get photo for the user_id specified by thumb_id
-   * Returns a photo for the user_id specified by thumb_id
-   * @param networkId Network ID for the stats   * @param thumbnailId LinkedIn identifier related to the thumbnail
-  */
-  public void getThumbnail (Integer networkId, String thumbnailId, final Response.Listener<String> responseListener, final Response.ErrorListener errorListener) {
-    Object postBody = null;
+    @SuppressWarnings("rawtypes")
+    private okhttp3.Call getThumbnailValidateBeforeCall(Integer networkId, String thumbnailId, final ApiCallback _callback) throws ApiException {
+        
+        // verify the required parameter 'networkId' is set
+        if (networkId == null) {
+            throw new ApiException("Missing the required parameter 'networkId' when calling getThumbnail(Async)");
+        }
+        
+        // verify the required parameter 'thumbnailId' is set
+        if (thumbnailId == null) {
+            throw new ApiException("Missing the required parameter 'thumbnailId' when calling getThumbnail(Async)");
+        }
+        
 
-    // verify the required parameter 'networkId' is set
-    if (networkId == null) {
-      VolleyError error = new VolleyError("Missing the required parameter 'networkId' when calling getThumbnail",
-        new ApiException(400, "Missing the required parameter 'networkId' when calling getThumbnail"));
+        okhttp3.Call localVarCall = getThumbnailCall(networkId, thumbnailId, _callback);
+        return localVarCall;
+
     }
-    // verify the required parameter 'thumbnailId' is set
-    if (thumbnailId == null) {
-      VolleyError error = new VolleyError("Missing the required parameter 'thumbnailId' when calling getThumbnail",
-        new ApiException(400, "Missing the required parameter 'thumbnailId' when calling getThumbnail"));
+
+    /**
+     * Get photo for the user_id specified by thumb_id
+     * Returns a photo for the user_id specified by thumb_id
+     * @param networkId Network ID for the stats (required)
+     * @param thumbnailId LinkedIn identifier related to the thumbnail (required)
+     * @return String
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> A List of to connect contacts by user with id li_user_id in this network </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Your request was made with invalid credentials. </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> You&#39;re not supposed to access this resource. </td><td>  -  </td></tr>
+     </table>
+     */
+    public String getThumbnail(Integer networkId, String thumbnailId) throws ApiException {
+        ApiResponse<String> localVarResp = getThumbnailWithHttpInfo(networkId, thumbnailId);
+        return localVarResp.getData();
     }
 
-    // create path and map variables
-    String path = "/network/{network_id}/thumbnail/{thumbnail_id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "network_id" + "\\}", apiInvoker.escapeString(networkId.toString())).replaceAll("\\{" + "thumbnail_id" + "\\}", apiInvoker.escapeString(thumbnailId.toString()));
-
-    // query params
-    List<Pair> queryParams = new ArrayList<Pair>();
-    // header params
-    Map<String, String> headerParams = new HashMap<String, String>();
-    // form params
-    Map<String, String> formParams = new HashMap<String, String>();
-
-
-
-    String[] contentTypes = {
-      
-    };
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-
-    if (contentType.startsWith("multipart/form-data")) {
-      // file uploading
-      MultipartEntityBuilder localVarBuilder = MultipartEntityBuilder.create();
-      
-
-      HttpEntity httpEntity = localVarBuilder.build();
-      postBody = httpEntity;
-    } else {
-      // normal form params
-          }
-
-    String[] authNames = new String[] { "ApiKeyAuth" };
-
-    try {
-      apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, authNames,
-        new Response.Listener<String>() {
-          @Override
-          public void onResponse(String localVarResponse) {
-            try {
-              responseListener.onResponse((String) ApiInvoker.deserialize(localVarResponse,  "", String.class));
-            } catch (ApiException exception) {
-               errorListener.onErrorResponse(new VolleyError(exception));
-            }
-          }
-      }, new Response.ErrorListener() {
-          @Override
-          public void onErrorResponse(VolleyError error) {
-            errorListener.onErrorResponse(error);
-          }
-      });
-    } catch (ApiException ex) {
-      errorListener.onErrorResponse(new VolleyError(ex));
+    /**
+     * Get photo for the user_id specified by thumb_id
+     * Returns a photo for the user_id specified by thumb_id
+     * @param networkId Network ID for the stats (required)
+     * @param thumbnailId LinkedIn identifier related to the thumbnail (required)
+     * @return ApiResponse&lt;String&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> A List of to connect contacts by user with id li_user_id in this network </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Your request was made with invalid credentials. </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> You&#39;re not supposed to access this resource. </td><td>  -  </td></tr>
+     </table>
+     */
+    public ApiResponse<String> getThumbnailWithHttpInfo(Integer networkId, String thumbnailId) throws ApiException {
+        okhttp3.Call localVarCall = getThumbnailValidateBeforeCall(networkId, thumbnailId, null);
+        Type localVarReturnType = new TypeToken<String>(){}.getType();
+        return localVarApiClient.execute(localVarCall, localVarReturnType);
     }
-  }
+
+    /**
+     * Get photo for the user_id specified by thumb_id (asynchronously)
+     * Returns a photo for the user_id specified by thumb_id
+     * @param networkId Network ID for the stats (required)
+     * @param thumbnailId LinkedIn identifier related to the thumbnail (required)
+     * @param _callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> A List of to connect contacts by user with id li_user_id in this network </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Your request was made with invalid credentials. </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> You&#39;re not supposed to access this resource. </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call getThumbnailAsync(Integer networkId, String thumbnailId, final ApiCallback<String> _callback) throws ApiException {
+
+        okhttp3.Call localVarCall = getThumbnailValidateBeforeCall(networkId, thumbnailId, _callback);
+        Type localVarReturnType = new TypeToken<String>(){}.getType();
+        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
+        return localVarCall;
+    }
 }

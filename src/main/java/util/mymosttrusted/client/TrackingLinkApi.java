@@ -1,342 +1,415 @@
-/**
- * MMT reports API
- * MMT reports API documentation.
- *
- * Do not edit the class manually.
+/*
+  MMT reports API
+  MMT reports API documentation.
+ 
+  Do not edit the class manually.
  */
+
 
 package util.mymosttrusted.client;
 
-import util.mymosttrusted.api.ApiInvoker;
+import util.mymosttrusted.api.ApiCallback;
+import util.mymosttrusted.api.ApiClient;
 import util.mymosttrusted.api.ApiException;
+import util.mymosttrusted.api.ApiResponse;
+import util.mymosttrusted.api.Configuration;
 import util.mymosttrusted.api.Pair;
+import util.mymosttrusted.api.ProgressRequestBody;
+import util.mymosttrusted.api.ProgressResponseBody;
 
-import util.mymosttrusted.model.*;
+import com.google.gson.reflect.TypeToken;
 
-import java.util.*;
+import java.io.IOException;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 
 import util.mymosttrusted.model.TrackingLinkDetailResult;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
-
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeoutException;
+import javax.ws.rs.core.GenericType;
 
 public class TrackingLinkApi {
-  String basePath = "https://api.mymosttrusted.net/v1";
-  ApiInvoker apiInvoker = ApiInvoker.getInstance();
+    private ApiClient localVarApiClient;
+    private int localHostIndex;
+    private String localCustomBaseUrl;
 
-  public void addHeader(String key, String value) {
-    getInvoker().addDefaultHeader(key, value);
-  }
-
-  public ApiInvoker getInvoker() {
-    return apiInvoker;
-  }
-
-  public void setBasePath(String basePath) {
-    this.basePath = basePath;
-  }
-
-  public String getBasePath() {
-    return basePath;
-  }
-
-  /**
-  * Get detailed tracking link list logged for the network with id {id}
-  * Returns a list of tracking link logged for the network with id {id}
-   * @param networkId Network ID for the stats
-   * @param page Page to fetch
-   * @param limit Number of records to return per page, maximum allowed number is 50
-   * @param trackingLinkName Get tracking links with name matching tracking_link_name
-   * @param fromDate Get tracking links created from this date onwards
-   * @return TrackingLinkDetailResult
-  */
-  public TrackingLinkDetailResult getNetworkTracking (Integer networkId, Integer page, Integer limit, String trackingLinkName, String fromDate) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
-    Object postBody = null;
-    // verify the required parameter 'networkId' is set
-    if (networkId == null) {
-      VolleyError error = new VolleyError("Missing the required parameter 'networkId' when calling getNetworkTracking",
-        new ApiException(400, "Missing the required parameter 'networkId' when calling getNetworkTracking"));
+    public TrackingLinkApi() {
+        this(Configuration.getDefaultApiClient());
     }
 
-    // create path and map variables
-    String path = "/network/{network_id}/tracking_links".replaceAll("\\{" + "network_id" + "\\}", apiInvoker.escapeString(networkId.toString()));
-
-    // query params
-    List<Pair> queryParams = new ArrayList<Pair>();
-    // header params
-    Map<String, String> headerParams = new HashMap<String, String>();
-    // form params
-    Map<String, String> formParams = new HashMap<String, String>();
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "page", page));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "limit", limit));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "tracking_link_name", trackingLinkName));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "from_date", fromDate));
-    String[] contentTypes = {
-    };
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-
-    if (contentType.startsWith("multipart/form-data")) {
-      // file uploading
-      MultipartEntityBuilder localVarBuilder = MultipartEntityBuilder.create();
-      HttpEntity httpEntity = localVarBuilder.build();
-      postBody = httpEntity;
-    } else {
-      // normal form params
+    public TrackingLinkApi(ApiClient apiClient) {
+        this.localVarApiClient = apiClient;
     }
 
-    String[] authNames = new String[] { "ApiKeyAuth" };
+    public ApiClient getApiClient() {
+        return localVarApiClient;
+    }
 
-    try {
-      String localVarResponse = apiInvoker.invokeAPI (basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, authNames);
-      if (localVarResponse != null) {
-         return (TrackingLinkDetailResult) ApiInvoker.deserialize(localVarResponse, "", TrackingLinkDetailResult.class);
-      } else {
-         return null;
-      }
-    } catch (ApiException ex) {
-       throw ex;
-    } catch (InterruptedException ex) {
-       throw ex;
-    } catch (ExecutionException ex) {
-      if (ex.getCause() instanceof VolleyError) {
-        VolleyError volleyError = (VolleyError)ex.getCause();
-        if (volleyError.networkResponse != null) {
-          throw new ApiException(volleyError.networkResponse.statusCode, volleyError.getMessage());
+    public void setApiClient(ApiClient apiClient) {
+        this.localVarApiClient = apiClient;
+    }
+
+    public int getHostIndex() {
+        return localHostIndex;
+    }
+
+    public void setHostIndex(int hostIndex) {
+        this.localHostIndex = hostIndex;
+    }
+
+    public String getCustomBaseUrl() {
+        return localCustomBaseUrl;
+    }
+
+    public void setCustomBaseUrl(String customBaseUrl) {
+        this.localCustomBaseUrl = customBaseUrl;
+    }
+
+    /**
+     * Build call for getNetworkTracking
+     * @param networkId Network ID for the stats (required)
+     * @param page Page to fetch (optional, default to 1)
+     * @param limit Number of records to return per page, maximum allowed number is 50 (optional, default to 50)
+     * @param trackingLinkName Get tracking links with name matching tracking_link_name (optional)
+     * @param fromDate Get tracking links created from this date onwards (optional)
+     * @param _callback Callback for upload/download progress
+     * @return Call to execute
+     * @throws ApiException If fail to serialize the request body object
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> A List of tracking links </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Your request was made with invalid credentials. </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> You&#39;re not supposed to access this resource. </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call getNetworkTrackingCall(Integer networkId, Integer page, Integer limit, String trackingLinkName, String fromDate, final ApiCallback _callback) throws ApiException {
+        String basePath = null;
+        // Operation Servers
+        String[] localBasePaths = new String[] {  };
+
+        // Determine Base Path to Use
+        if (localCustomBaseUrl != null){
+            basePath = localCustomBaseUrl;
+        } else if ( localBasePaths.length > 0 ) {
+            basePath = localBasePaths[localHostIndex];
+        } else {
+            basePath = null;
         }
-      }
-      throw ex;
-    } catch (TimeoutException ex) {
-      throw ex;
-    }
-  }
 
-      /**
-   * Get detailed tracking link list logged for the network with id {id}
-   * Returns a list of tracking link logged for the network with id {id}
-   * @param networkId Network ID for the stats   * @param page Page to fetch   * @param limit Number of records to return per page, maximum allowed number is 50   * @param trackingLinkName Get tracking links with name matching tracking_link_name   * @param fromDate Get tracking links created from this date onwards
-  */
-  public void getNetworkTracking (Integer networkId, Integer page, Integer limit, String trackingLinkName, String fromDate, final Response.Listener<TrackingLinkDetailResult> responseListener, final Response.ErrorListener errorListener) {
-    Object postBody = null;
+        Object localVarPostBody = null;
 
-    // verify the required parameter 'networkId' is set
-    if (networkId == null) {
-      VolleyError error = new VolleyError("Missing the required parameter 'networkId' when calling getNetworkTracking",
-        new ApiException(400, "Missing the required parameter 'networkId' when calling getNetworkTracking"));
-    }
+        // create path and map variables
+        String localVarPath = "/network/{network_id}/tracking_links"
+            .replaceAll("\\{" + "network_id" + "\\}", localVarApiClient.escapeString(networkId.toString()));
 
-    // create path and map variables
-    String path = "/network/{network_id}/tracking_links".replaceAll("\\{format\\}","json").replaceAll("\\{" + "network_id" + "\\}", apiInvoker.escapeString(networkId.toString()));
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+        Map<String, String> localVarCookieParams = new HashMap<String, String>();
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
-    // query params
-    List<Pair> queryParams = new ArrayList<Pair>();
-    // header params
-    Map<String, String> headerParams = new HashMap<String, String>();
-    // form params
-    Map<String, String> formParams = new HashMap<String, String>();
-
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "page", page));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "limit", limit));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "tracking_link_name", trackingLinkName));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "from_date", fromDate));
-
-
-    String[] contentTypes = {
-      
-    };
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-
-    if (contentType.startsWith("multipart/form-data")) {
-      // file uploading
-      MultipartEntityBuilder localVarBuilder = MultipartEntityBuilder.create();
-      
-
-      HttpEntity httpEntity = localVarBuilder.build();
-      postBody = httpEntity;
-    } else {
-      // normal form params
-          }
-
-    String[] authNames = new String[] { "ApiKeyAuth" };
-
-    try {
-      apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, authNames,
-        new Response.Listener<String>() {
-          @Override
-          public void onResponse(String localVarResponse) {
-            try {
-              responseListener.onResponse((TrackingLinkDetailResult) ApiInvoker.deserialize(localVarResponse,  "", TrackingLinkDetailResult.class));
-            } catch (ApiException exception) {
-               errorListener.onErrorResponse(new VolleyError(exception));
-            }
-          }
-      }, new Response.ErrorListener() {
-          @Override
-          public void onErrorResponse(VolleyError error) {
-            errorListener.onErrorResponse(error);
-          }
-      });
-    } catch (ApiException ex) {
-      errorListener.onErrorResponse(new VolleyError(ex));
-    }
-  }
-  /**
-  * Get detailed tracking link list logged for the network with id {id} by user with linkedin id li_user_id
-  * Returns a list of tracking link logged for the network with id {id} by user with linkedin id li_user_id
-   * @param networkId Network ID for the stats
-   * @param userId LinkedIn identifier for the user in case of a specific user stats
-   * @param page Page to fetch
-   * @param limit Number of records to return per page, maximum allowed number is 50
-   * @param trackingLinkName Get tracking links with name matching tracking_link_name
-   * @param fromDate Get tracking links created from this date onwards
-   * @return TrackingLinkDetailResult
-  */
-  public TrackingLinkDetailResult getTracking (Integer networkId, String userId, Integer page, Integer limit, String trackingLinkName, String fromDate) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
-    Object postBody = null;
-    // verify the required parameter 'networkId' is set
-    if (networkId == null) {
-      VolleyError error = new VolleyError("Missing the required parameter 'networkId' when calling getTracking",
-        new ApiException(400, "Missing the required parameter 'networkId' when calling getTracking"));
-    }
-    // verify the required parameter 'userId' is set
-    if (userId == null) {
-      VolleyError error = new VolleyError("Missing the required parameter 'userId' when calling getTracking",
-        new ApiException(400, "Missing the required parameter 'userId' when calling getTracking"));
-    }
-
-    // create path and map variables
-    String path = "/network/{network_id}/tracking_links/{user_id}".replaceAll("\\{" + "network_id" + "\\}", apiInvoker.escapeString(networkId.toString())).replaceAll("\\{" + "user_id" + "\\}", apiInvoker.escapeString(userId.toString()));
-
-    // query params
-    List<Pair> queryParams = new ArrayList<Pair>();
-    // header params
-    Map<String, String> headerParams = new HashMap<String, String>();
-    // form params
-    Map<String, String> formParams = new HashMap<String, String>();
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "page", page));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "limit", limit));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "tracking_link_name", trackingLinkName));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "from_date", fromDate));
-    String[] contentTypes = {
-    };
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-
-    if (contentType.startsWith("multipart/form-data")) {
-      // file uploading
-      MultipartEntityBuilder localVarBuilder = MultipartEntityBuilder.create();
-      HttpEntity httpEntity = localVarBuilder.build();
-      postBody = httpEntity;
-    } else {
-      // normal form params
-    }
-
-    String[] authNames = new String[] { "ApiKeyAuth" };
-
-    try {
-      String localVarResponse = apiInvoker.invokeAPI (basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, authNames);
-      if (localVarResponse != null) {
-         return (TrackingLinkDetailResult) ApiInvoker.deserialize(localVarResponse, "", TrackingLinkDetailResult.class);
-      } else {
-         return null;
-      }
-    } catch (ApiException ex) {
-       throw ex;
-    } catch (InterruptedException ex) {
-       throw ex;
-    } catch (ExecutionException ex) {
-      if (ex.getCause() instanceof VolleyError) {
-        VolleyError volleyError = (VolleyError)ex.getCause();
-        if (volleyError.networkResponse != null) {
-          throw new ApiException(volleyError.networkResponse.statusCode, volleyError.getMessage());
+        if (page != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("page", page));
         }
-      }
-      throw ex;
-    } catch (TimeoutException ex) {
-      throw ex;
+
+        if (limit != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("limit", limit));
+        }
+
+        if (trackingLinkName != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("tracking_link_name", trackingLinkName));
+        }
+
+        if (fromDate != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("from_date", fromDate));
+        }
+
+        final String[] localVarAccepts = {
+            "application/json"
+        };
+        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) {
+            localVarHeaderParams.put("Accept", localVarAccept);
+        }
+
+        final String[] localVarContentTypes = {
+            
+        };
+        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
+        if (localVarContentType != null) {
+            localVarHeaderParams.put("Content-Type", localVarContentType);
+        }
+
+        String[] localVarAuthNames = new String[] { "ApiKeyAuth" };
+        return localVarApiClient.buildCall(basePath, localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
-  }
 
-      /**
-   * Get detailed tracking link list logged for the network with id {id} by user with linkedin id li_user_id
-   * Returns a list of tracking link logged for the network with id {id} by user with linkedin id li_user_id
-   * @param networkId Network ID for the stats   * @param userId LinkedIn identifier for the user in case of a specific user stats   * @param page Page to fetch   * @param limit Number of records to return per page, maximum allowed number is 50   * @param trackingLinkName Get tracking links with name matching tracking_link_name   * @param fromDate Get tracking links created from this date onwards
-  */
-  public void getTracking (Integer networkId, String userId, Integer page, Integer limit, String trackingLinkName, String fromDate, final Response.Listener<TrackingLinkDetailResult> responseListener, final Response.ErrorListener errorListener) {
-    Object postBody = null;
+    @SuppressWarnings("rawtypes")
+    private okhttp3.Call getNetworkTrackingValidateBeforeCall(Integer networkId, Integer page, Integer limit, String trackingLinkName, String fromDate, final ApiCallback _callback) throws ApiException {
+        
+        // verify the required parameter 'networkId' is set
+        if (networkId == null) {
+            throw new ApiException("Missing the required parameter 'networkId' when calling getNetworkTracking(Async)");
+        }
+        
 
-    // verify the required parameter 'networkId' is set
-    if (networkId == null) {
-      VolleyError error = new VolleyError("Missing the required parameter 'networkId' when calling getTracking",
-        new ApiException(400, "Missing the required parameter 'networkId' when calling getTracking"));
-    }
-    // verify the required parameter 'userId' is set
-    if (userId == null) {
-      VolleyError error = new VolleyError("Missing the required parameter 'userId' when calling getTracking",
-        new ApiException(400, "Missing the required parameter 'userId' when calling getTracking"));
+        okhttp3.Call localVarCall = getNetworkTrackingCall(networkId, page, limit, trackingLinkName, fromDate, _callback);
+        return localVarCall;
+
     }
 
-    // create path and map variables
-    String path = "/network/{network_id}/tracking_links/{user_id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "network_id" + "\\}", apiInvoker.escapeString(networkId.toString())).replaceAll("\\{" + "user_id" + "\\}", apiInvoker.escapeString(userId.toString()));
-
-    // query params
-    List<Pair> queryParams = new ArrayList<Pair>();
-    // header params
-    Map<String, String> headerParams = new HashMap<String, String>();
-    // form params
-    Map<String, String> formParams = new HashMap<String, String>();
-
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "page", page));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "limit", limit));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "tracking_link_name", trackingLinkName));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "from_date", fromDate));
-
-
-    String[] contentTypes = {
-      
-    };
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-
-    if (contentType.startsWith("multipart/form-data")) {
-      // file uploading
-      MultipartEntityBuilder localVarBuilder = MultipartEntityBuilder.create();
-      
-
-      HttpEntity httpEntity = localVarBuilder.build();
-      postBody = httpEntity;
-    } else {
-      // normal form params
-          }
-
-    String[] authNames = new String[] { "ApiKeyAuth" };
-
-    try {
-      apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, authNames,
-        new Response.Listener<String>() {
-          @Override
-          public void onResponse(String localVarResponse) {
-            try {
-              responseListener.onResponse((TrackingLinkDetailResult) ApiInvoker.deserialize(localVarResponse,  "", TrackingLinkDetailResult.class));
-            } catch (ApiException exception) {
-               errorListener.onErrorResponse(new VolleyError(exception));
-            }
-          }
-      }, new Response.ErrorListener() {
-          @Override
-          public void onErrorResponse(VolleyError error) {
-            errorListener.onErrorResponse(error);
-          }
-      });
-    } catch (ApiException ex) {
-      errorListener.onErrorResponse(new VolleyError(ex));
+    /**
+     * Get detailed tracking link list logged for the network with id {id}
+     * Returns a list of tracking link logged for the network with id {id}
+     * @param networkId Network ID for the stats (required)
+     * @param page Page to fetch (optional, default to 1)
+     * @param limit Number of records to return per page, maximum allowed number is 50 (optional, default to 50)
+     * @param trackingLinkName Get tracking links with name matching tracking_link_name (optional)
+     * @param fromDate Get tracking links created from this date onwards (optional)
+     * @return TrackingLinkDetailResult
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> A List of tracking links </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Your request was made with invalid credentials. </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> You&#39;re not supposed to access this resource. </td><td>  -  </td></tr>
+     </table>
+     */
+    public TrackingLinkDetailResult getNetworkTracking(Integer networkId, Integer page, Integer limit, String trackingLinkName, String fromDate) throws ApiException {
+        ApiResponse<TrackingLinkDetailResult> localVarResp = getNetworkTrackingWithHttpInfo(networkId, page, limit, trackingLinkName, fromDate);
+        return localVarResp.getData();
     }
-  }
+
+    /**
+     * Get detailed tracking link list logged for the network with id {id}
+     * Returns a list of tracking link logged for the network with id {id}
+     * @param networkId Network ID for the stats (required)
+     * @param page Page to fetch (optional, default to 1)
+     * @param limit Number of records to return per page, maximum allowed number is 50 (optional, default to 50)
+     * @param trackingLinkName Get tracking links with name matching tracking_link_name (optional)
+     * @param fromDate Get tracking links created from this date onwards (optional)
+     * @return ApiResponse&lt;TrackingLinkDetailResult&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> A List of tracking links </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Your request was made with invalid credentials. </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> You&#39;re not supposed to access this resource. </td><td>  -  </td></tr>
+     </table>
+     */
+    public ApiResponse<TrackingLinkDetailResult> getNetworkTrackingWithHttpInfo(Integer networkId, Integer page, Integer limit, String trackingLinkName, String fromDate) throws ApiException {
+        okhttp3.Call localVarCall = getNetworkTrackingValidateBeforeCall(networkId, page, limit, trackingLinkName, fromDate, null);
+        Type localVarReturnType = new TypeToken<TrackingLinkDetailResult>(){}.getType();
+        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    }
+
+    /**
+     * Get detailed tracking link list logged for the network with id {id} (asynchronously)
+     * Returns a list of tracking link logged for the network with id {id}
+     * @param networkId Network ID for the stats (required)
+     * @param page Page to fetch (optional, default to 1)
+     * @param limit Number of records to return per page, maximum allowed number is 50 (optional, default to 50)
+     * @param trackingLinkName Get tracking links with name matching tracking_link_name (optional)
+     * @param fromDate Get tracking links created from this date onwards (optional)
+     * @param _callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> A List of tracking links </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Your request was made with invalid credentials. </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> You&#39;re not supposed to access this resource. </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call getNetworkTrackingAsync(Integer networkId, Integer page, Integer limit, String trackingLinkName, String fromDate, final ApiCallback<TrackingLinkDetailResult> _callback) throws ApiException {
+
+        okhttp3.Call localVarCall = getNetworkTrackingValidateBeforeCall(networkId, page, limit, trackingLinkName, fromDate, _callback);
+        Type localVarReturnType = new TypeToken<TrackingLinkDetailResult>(){}.getType();
+        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
+        return localVarCall;
+    }
+    /**
+     * Build call for getTracking
+     * @param networkId Network ID for the stats (required)
+     * @param userId LinkedIn identifier for the user in case of a specific user stats (required)
+     * @param page Page to fetch (optional, default to 1)
+     * @param limit Number of records to return per page, maximum allowed number is 50 (optional, default to 50)
+     * @param trackingLinkName Get tracking links with name matching tracking_link_name (optional)
+     * @param fromDate Get tracking links created from this date onwards (optional)
+     * @param _callback Callback for upload/download progress
+     * @return Call to execute
+     * @throws ApiException If fail to serialize the request body object
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> A List of tracking links </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Your request was made with invalid credentials. </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> You&#39;re not supposed to access this resource. </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call getTrackingCall(Integer networkId, String userId, Integer page, Integer limit, String trackingLinkName, String fromDate, final ApiCallback _callback) throws ApiException {
+        String basePath = null;
+        // Operation Servers
+        String[] localBasePaths = new String[] {  };
+
+        // Determine Base Path to Use
+        if (localCustomBaseUrl != null){
+            basePath = localCustomBaseUrl;
+        } else if ( localBasePaths.length > 0 ) {
+            basePath = localBasePaths[localHostIndex];
+        } else {
+            basePath = null;
+        }
+
+        Object localVarPostBody = null;
+
+        // create path and map variables
+        String localVarPath = "/network/{network_id}/tracking_links/{user_id}"
+            .replaceAll("\\{" + "network_id" + "\\}", localVarApiClient.escapeString(networkId.toString()))
+            .replaceAll("\\{" + "user_id" + "\\}", localVarApiClient.escapeString(userId.toString()));
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+        Map<String, String> localVarCookieParams = new HashMap<String, String>();
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+        if (page != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("page", page));
+        }
+
+        if (limit != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("limit", limit));
+        }
+
+        if (trackingLinkName != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("tracking_link_name", trackingLinkName));
+        }
+
+        if (fromDate != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("from_date", fromDate));
+        }
+
+        final String[] localVarAccepts = {
+            "application/json"
+        };
+        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) {
+            localVarHeaderParams.put("Accept", localVarAccept);
+        }
+
+        final String[] localVarContentTypes = {
+            
+        };
+        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
+        if (localVarContentType != null) {
+            localVarHeaderParams.put("Content-Type", localVarContentType);
+        }
+
+        String[] localVarAuthNames = new String[] { "ApiKeyAuth" };
+        return localVarApiClient.buildCall(basePath, localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+    }
+
+    @SuppressWarnings("rawtypes")
+    private okhttp3.Call getTrackingValidateBeforeCall(Integer networkId, String userId, Integer page, Integer limit, String trackingLinkName, String fromDate, final ApiCallback _callback) throws ApiException {
+        
+        // verify the required parameter 'networkId' is set
+        if (networkId == null) {
+            throw new ApiException("Missing the required parameter 'networkId' when calling getTracking(Async)");
+        }
+        
+        // verify the required parameter 'userId' is set
+        if (userId == null) {
+            throw new ApiException("Missing the required parameter 'userId' when calling getTracking(Async)");
+        }
+        
+
+        okhttp3.Call localVarCall = getTrackingCall(networkId, userId, page, limit, trackingLinkName, fromDate, _callback);
+        return localVarCall;
+
+    }
+
+    /**
+     * Get detailed tracking link list logged for the network with id {id} by user with linkedin id li_user_id
+     * Returns a list of tracking link logged for the network with id {id} by user with linkedin id li_user_id
+     * @param networkId Network ID for the stats (required)
+     * @param userId LinkedIn identifier for the user in case of a specific user stats (required)
+     * @param page Page to fetch (optional, default to 1)
+     * @param limit Number of records to return per page, maximum allowed number is 50 (optional, default to 50)
+     * @param trackingLinkName Get tracking links with name matching tracking_link_name (optional)
+     * @param fromDate Get tracking links created from this date onwards (optional)
+     * @return TrackingLinkDetailResult
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> A List of tracking links </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Your request was made with invalid credentials. </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> You&#39;re not supposed to access this resource. </td><td>  -  </td></tr>
+     </table>
+     */
+    public TrackingLinkDetailResult getTracking(Integer networkId, String userId, Integer page, Integer limit, String trackingLinkName, String fromDate) throws ApiException {
+        ApiResponse<TrackingLinkDetailResult> localVarResp = getTrackingWithHttpInfo(networkId, userId, page, limit, trackingLinkName, fromDate);
+        return localVarResp.getData();
+    }
+
+    /**
+     * Get detailed tracking link list logged for the network with id {id} by user with linkedin id li_user_id
+     * Returns a list of tracking link logged for the network with id {id} by user with linkedin id li_user_id
+     * @param networkId Network ID for the stats (required)
+     * @param userId LinkedIn identifier for the user in case of a specific user stats (required)
+     * @param page Page to fetch (optional, default to 1)
+     * @param limit Number of records to return per page, maximum allowed number is 50 (optional, default to 50)
+     * @param trackingLinkName Get tracking links with name matching tracking_link_name (optional)
+     * @param fromDate Get tracking links created from this date onwards (optional)
+     * @return ApiResponse&lt;TrackingLinkDetailResult&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> A List of tracking links </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Your request was made with invalid credentials. </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> You&#39;re not supposed to access this resource. </td><td>  -  </td></tr>
+     </table>
+     */
+    public ApiResponse<TrackingLinkDetailResult> getTrackingWithHttpInfo(Integer networkId, String userId, Integer page, Integer limit, String trackingLinkName, String fromDate) throws ApiException {
+        okhttp3.Call localVarCall = getTrackingValidateBeforeCall(networkId, userId, page, limit, trackingLinkName, fromDate, null);
+        Type localVarReturnType = new TypeToken<TrackingLinkDetailResult>(){}.getType();
+        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    }
+
+    /**
+     * Get detailed tracking link list logged for the network with id {id} by user with linkedin id li_user_id (asynchronously)
+     * Returns a list of tracking link logged for the network with id {id} by user with linkedin id li_user_id
+     * @param networkId Network ID for the stats (required)
+     * @param userId LinkedIn identifier for the user in case of a specific user stats (required)
+     * @param page Page to fetch (optional, default to 1)
+     * @param limit Number of records to return per page, maximum allowed number is 50 (optional, default to 50)
+     * @param trackingLinkName Get tracking links with name matching tracking_link_name (optional)
+     * @param fromDate Get tracking links created from this date onwards (optional)
+     * @param _callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> A List of tracking links </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Your request was made with invalid credentials. </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> You&#39;re not supposed to access this resource. </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call getTrackingAsync(Integer networkId, String userId, Integer page, Integer limit, String trackingLinkName, String fromDate, final ApiCallback<TrackingLinkDetailResult> _callback) throws ApiException {
+
+        okhttp3.Call localVarCall = getTrackingValidateBeforeCall(networkId, userId, page, limit, trackingLinkName, fromDate, _callback);
+        Type localVarReturnType = new TypeToken<TrackingLinkDetailResult>(){}.getType();
+        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
+        return localVarCall;
+    }
 }

@@ -1,71 +1,170 @@
-/**
- * MMT reports API
- * MMT reports API documentation.
- *
- * Do not edit the class manually.
+/*
+  MMT reports API
+  MMT reports API documentation.
+ 
+  Do not edit the class manually.
  */
+
 
 package util.mymosttrusted.model;
 
-import java.util.*;
-import util.mymosttrusted.model.Network;
-import io.swagger.annotations.*;
+import java.util.Objects;
+import java.util.Arrays;
+import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import util.mymosttrusted.model.Network;
 
-@ApiModel(description = "")
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.TypeAdapterFactory;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
+import util.mymosttrusted.api.JSON;
+
+/**
+ * NetworkResult
+ */
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-07-18T09:33:18.403887+03:00[Africa/Nairobi]")
 public class NetworkResult {
-  
-  @SerializedName("total")
-  private Integer total = null;
-  @SerializedName("page")
-  private Integer page = null;
-  @SerializedName("limit")
-  private Integer limit = null;
-  @SerializedName("data")
-  private List<List> data = null;
+  public static final String SERIALIZED_NAME_TOTAL = "total";
+  @SerializedName(SERIALIZED_NAME_TOTAL)
+  private Integer total;
 
-  /**
+  public static final String SERIALIZED_NAME_PAGE = "page";
+  @SerializedName(SERIALIZED_NAME_PAGE)
+  private Integer page;
+
+  public static final String SERIALIZED_NAME_LIMIT = "limit";
+  @SerializedName(SERIALIZED_NAME_LIMIT)
+  private Integer limit;
+
+  public static final String SERIALIZED_NAME_DATA = "data";
+  @SerializedName(SERIALIZED_NAME_DATA)
+  private List<List<Network>> data = null;
+
+  public NetworkResult() { 
+  }
+
+  public NetworkResult total(Integer total) {
+    
+    this.total = total;
+    return this;
+  }
+
+   /**
    * Total Number of networks
-   **/
-  @ApiModelProperty(value = "Total Number of networks")
+   * @return total
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(example = "1", value = "Total Number of networks")
+
   public Integer getTotal() {
     return total;
   }
+
+
   public void setTotal(Integer total) {
     this.total = total;
   }
 
-  /**
+
+  public NetworkResult page(Integer page) {
+    
+    this.page = page;
+    return this;
+  }
+
+   /**
    * Loaded page number
-   **/
-  @ApiModelProperty(value = "Loaded page number")
+   * @return page
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(example = "1", value = "Loaded page number")
+
   public Integer getPage() {
     return page;
   }
+
+
   public void setPage(Integer page) {
     this.page = page;
   }
 
-  /**
+
+  public NetworkResult limit(Integer limit) {
+    
+    this.limit = limit;
+    return this;
+  }
+
+   /**
    * Items per page
-   **/
-  @ApiModelProperty(value = "Items per page")
+   * @return limit
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(example = "50", value = "Items per page")
+
   public Integer getLimit() {
     return limit;
   }
+
+
   public void setLimit(Integer limit) {
     this.limit = limit;
   }
 
-  /**
-   **/
+
+  public NetworkResult data(List<List<Network>> data) {
+    
+    this.data = data;
+    return this;
+  }
+
+  public NetworkResult addDataItem(List<Network> dataItem) {
+    if (this.data == null) {
+      this.data = new ArrayList<>();
+    }
+    this.data.add(dataItem);
+    return this;
+  }
+
+   /**
+   * Get data
+   * @return data
+  **/
+  @javax.annotation.Nullable
   @ApiModelProperty(value = "")
-  public List<List> getData() {
+
+  public List<List<Network>> getData() {
     return data;
   }
-  public void setData(List<List> data) {
+
+
+  public void setData(List<List<Network>> data) {
     this.data = data;
   }
+
 
 
   @Override
@@ -77,32 +176,131 @@ public class NetworkResult {
       return false;
     }
     NetworkResult networkResult = (NetworkResult) o;
-    return (this.total == null ? networkResult.total == null : this.total.equals(networkResult.total)) &&
-        (this.page == null ? networkResult.page == null : this.page.equals(networkResult.page)) &&
-        (this.limit == null ? networkResult.limit == null : this.limit.equals(networkResult.limit)) &&
-        (this.data == null ? networkResult.data == null : this.data.equals(networkResult.data));
+    return Objects.equals(this.total, networkResult.total) &&
+        Objects.equals(this.page, networkResult.page) &&
+        Objects.equals(this.limit, networkResult.limit) &&
+        Objects.equals(this.data, networkResult.data);
   }
 
   @Override
   public int hashCode() {
-    int result = 17;
-    result = 31 * result + (this.total == null ? 0: this.total.hashCode());
-    result = 31 * result + (this.page == null ? 0: this.page.hashCode());
-    result = 31 * result + (this.limit == null ? 0: this.limit.hashCode());
-    result = 31 * result + (this.data == null ? 0: this.data.hashCode());
-    return result;
+    return Objects.hash(total, page, limit, data);
   }
 
   @Override
-  public String toString()  {
+  public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class NetworkResult {\n");
-    
-    sb.append("  total: ").append(total).append("\n");
-    sb.append("  page: ").append(page).append("\n");
-    sb.append("  limit: ").append(limit).append("\n");
-    sb.append("  data: ").append(data).append("\n");
-    sb.append("}\n");
+    sb.append("    total: ").append(toIndentedString(total)).append("\n");
+    sb.append("    page: ").append(toIndentedString(page)).append("\n");
+    sb.append("    limit: ").append(toIndentedString(limit)).append("\n");
+    sb.append("    data: ").append(toIndentedString(data)).append("\n");
+    sb.append("}");
     return sb.toString();
   }
+
+  /**
+   * Convert the given object to string with each line indented by 4 spaces
+   * (except the first line).
+   */
+  private String toIndentedString(Object o) {
+    if (o == null) {
+      return "null";
+    }
+    return o.toString().replace("\n", "\n    ");
+  }
+
+
+  public static HashSet<String> openapiFields;
+  public static HashSet<String> openapiRequiredFields;
+
+  static {
+    // a set of all properties/fields (JSON key names)
+    openapiFields = new HashSet<String>();
+    openapiFields.add("total");
+    openapiFields.add("page");
+    openapiFields.add("limit");
+    openapiFields.add("data");
+
+    // a set of required properties/fields (JSON key names)
+    openapiRequiredFields = new HashSet<String>();
+  }
+
+ /**
+  * Validates the JSON Object and throws an exception if issues found
+  *
+  * @param jsonObj JSON Object
+  * @throws IOException if the JSON Object is invalid with respect to NetworkResult
+  */
+  public static void validateJsonObject(JsonObject jsonObj) throws IOException {
+      if (jsonObj == null) {
+        if (NetworkResult.openapiRequiredFields.isEmpty()) {
+          return;
+        } else { // has required fields
+          throw new IllegalArgumentException(String.format("The required field(s) %s in NetworkResult is not found in the empty JSON string", NetworkResult.openapiRequiredFields.toString()));
+        }
+      }
+
+      Set<Entry<String, JsonElement>> entries = jsonObj.entrySet();
+      // check to see if the JSON string contains additional fields
+      for (Entry<String, JsonElement> entry : entries) {
+        if (!NetworkResult.openapiFields.contains(entry.getKey())) {
+          throw new IllegalArgumentException(String.format("The field `%s` in the JSON string is not defined in the `NetworkResult` properties. JSON: %s", entry.getKey(), jsonObj.toString()));
+        }
+      }
+      // ensure the json data is an array
+      if (jsonObj.get("data") != null && !jsonObj.get("data").isJsonArray()) {
+        throw new IllegalArgumentException(String.format("Expected the field `data` to be an array in the JSON string but got `%s`", jsonObj.get("data").toString()));
+      }
+  }
+
+  public static class CustomTypeAdapterFactory implements TypeAdapterFactory {
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
+       if (!NetworkResult.class.isAssignableFrom(type.getRawType())) {
+         return null; // this class only serializes 'NetworkResult' and its subtypes
+       }
+       final TypeAdapter<JsonElement> elementAdapter = gson.getAdapter(JsonElement.class);
+       final TypeAdapter<NetworkResult> thisAdapter
+                        = gson.getDelegateAdapter(this, TypeToken.get(NetworkResult.class));
+
+       return (TypeAdapter<T>) new TypeAdapter<NetworkResult>() {
+           @Override
+           public void write(JsonWriter out, NetworkResult value) throws IOException {
+             JsonObject obj = thisAdapter.toJsonTree(value).getAsJsonObject();
+             elementAdapter.write(out, obj);
+           }
+
+           @Override
+           public NetworkResult read(JsonReader in) throws IOException {
+             JsonObject jsonObj = elementAdapter.read(in).getAsJsonObject();
+             validateJsonObject(jsonObj);
+             return thisAdapter.fromJsonTree(jsonObj);
+           }
+
+       }.nullSafe();
+    }
+  }
+
+ /**
+  * Create an instance of NetworkResult given an JSON string
+  *
+  * @param jsonString JSON string
+  * @return An instance of NetworkResult
+  * @throws IOException if the JSON string is invalid with respect to NetworkResult
+  */
+  public static NetworkResult fromJson(String jsonString) throws IOException {
+    return JSON.getGson().fromJson(jsonString, NetworkResult.class);
+  }
+
+ /**
+  * Convert an instance of NetworkResult to an JSON string
+  *
+  * @return JSON string
+  */
+  public String toJson() {
+    return JSON.getGson().toJson(this);
+  }
 }
+

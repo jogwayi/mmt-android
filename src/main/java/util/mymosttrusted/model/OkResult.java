@@ -1,44 +1,105 @@
-/**
- * MMT reports API
- * MMT reports API documentation.
- *
- * Do not edit the class manually.
+/*
+  MMT reports API
+  MMT reports API documentation.
+ 
+  Do not edit the class manually.
  */
+
 
 package util.mymosttrusted.model;
 
-import io.swagger.annotations.*;
+import java.util.Objects;
+import java.util.Arrays;
+import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import java.io.IOException;
 
-@ApiModel(description = "")
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.TypeAdapterFactory;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
+import util.mymosttrusted.api.JSON;
+
+/**
+ * OkResult
+ */
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-07-18T09:33:18.403887+03:00[Africa/Nairobi]")
 public class OkResult {
-  
-  @SerializedName("code")
-  private Integer code = null;
-  @SerializedName("message")
-  private String message = null;
+  public static final String SERIALIZED_NAME_CODE = "code";
+  @SerializedName(SERIALIZED_NAME_CODE)
+  private Integer code;
 
-  /**
+  public static final String SERIALIZED_NAME_MESSAGE = "message";
+  @SerializedName(SERIALIZED_NAME_MESSAGE)
+  private String message;
+
+  public OkResult() { 
+  }
+
+  public OkResult code(Integer code) {
+    
+    this.code = code;
+    return this;
+  }
+
+   /**
    * 200 represents success, all else unsuccessful
-   **/
-  @ApiModelProperty(value = "200 represents success, all else unsuccessful")
+   * @return code
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(example = "200", value = "200 represents success, all else unsuccessful")
+
   public Integer getCode() {
     return code;
   }
+
+
   public void setCode(Integer code) {
     this.code = code;
   }
 
-  /**
+
+  public OkResult message(String message) {
+    
+    this.message = message;
+    return this;
+  }
+
+   /**
    * The message that comes about the status of the configuration update
-   **/
-  @ApiModelProperty(value = "The message that comes about the status of the configuration update")
+   * @return message
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(example = "Success", value = "The message that comes about the status of the configuration update")
+
   public String getMessage() {
     return message;
   }
+
+
   public void setMessage(String message) {
     this.message = message;
   }
+
 
 
   @Override
@@ -50,26 +111,124 @@ public class OkResult {
       return false;
     }
     OkResult okResult = (OkResult) o;
-    return (this.code == null ? okResult.code == null : this.code.equals(okResult.code)) &&
-        (this.message == null ? okResult.message == null : this.message.equals(okResult.message));
+    return Objects.equals(this.code, okResult.code) &&
+        Objects.equals(this.message, okResult.message);
   }
 
   @Override
   public int hashCode() {
-    int result = 17;
-    result = 31 * result + (this.code == null ? 0: this.code.hashCode());
-    result = 31 * result + (this.message == null ? 0: this.message.hashCode());
-    return result;
+    return Objects.hash(code, message);
   }
 
   @Override
-  public String toString()  {
+  public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class OkResult {\n");
-    
-    sb.append("  code: ").append(code).append("\n");
-    sb.append("  message: ").append(message).append("\n");
-    sb.append("}\n");
+    sb.append("    code: ").append(toIndentedString(code)).append("\n");
+    sb.append("    message: ").append(toIndentedString(message)).append("\n");
+    sb.append("}");
     return sb.toString();
   }
+
+  /**
+   * Convert the given object to string with each line indented by 4 spaces
+   * (except the first line).
+   */
+  private String toIndentedString(Object o) {
+    if (o == null) {
+      return "null";
+    }
+    return o.toString().replace("\n", "\n    ");
+  }
+
+
+  public static HashSet<String> openapiFields;
+  public static HashSet<String> openapiRequiredFields;
+
+  static {
+    // a set of all properties/fields (JSON key names)
+    openapiFields = new HashSet<String>();
+    openapiFields.add("code");
+    openapiFields.add("message");
+
+    // a set of required properties/fields (JSON key names)
+    openapiRequiredFields = new HashSet<String>();
+  }
+
+ /**
+  * Validates the JSON Object and throws an exception if issues found
+  *
+  * @param jsonObj JSON Object
+  * @throws IOException if the JSON Object is invalid with respect to OkResult
+  */
+  public static void validateJsonObject(JsonObject jsonObj) throws IOException {
+      if (jsonObj == null) {
+        if (OkResult.openapiRequiredFields.isEmpty()) {
+          return;
+        } else { // has required fields
+          throw new IllegalArgumentException(String.format("The required field(s) %s in OkResult is not found in the empty JSON string", OkResult.openapiRequiredFields.toString()));
+        }
+      }
+
+      Set<Entry<String, JsonElement>> entries = jsonObj.entrySet();
+      // check to see if the JSON string contains additional fields
+      for (Entry<String, JsonElement> entry : entries) {
+        if (!OkResult.openapiFields.contains(entry.getKey())) {
+          throw new IllegalArgumentException(String.format("The field `%s` in the JSON string is not defined in the `OkResult` properties. JSON: %s", entry.getKey(), jsonObj.toString()));
+        }
+      }
+      if (jsonObj.get("message") != null && !jsonObj.get("message").isJsonPrimitive()) {
+        throw new IllegalArgumentException(String.format("Expected the field `message` to be a primitive type in the JSON string but got `%s`", jsonObj.get("message").toString()));
+      }
+  }
+
+  public static class CustomTypeAdapterFactory implements TypeAdapterFactory {
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
+       if (!OkResult.class.isAssignableFrom(type.getRawType())) {
+         return null; // this class only serializes 'OkResult' and its subtypes
+       }
+       final TypeAdapter<JsonElement> elementAdapter = gson.getAdapter(JsonElement.class);
+       final TypeAdapter<OkResult> thisAdapter
+                        = gson.getDelegateAdapter(this, TypeToken.get(OkResult.class));
+
+       return (TypeAdapter<T>) new TypeAdapter<OkResult>() {
+           @Override
+           public void write(JsonWriter out, OkResult value) throws IOException {
+             JsonObject obj = thisAdapter.toJsonTree(value).getAsJsonObject();
+             elementAdapter.write(out, obj);
+           }
+
+           @Override
+           public OkResult read(JsonReader in) throws IOException {
+             JsonObject jsonObj = elementAdapter.read(in).getAsJsonObject();
+             validateJsonObject(jsonObj);
+             return thisAdapter.fromJsonTree(jsonObj);
+           }
+
+       }.nullSafe();
+    }
+  }
+
+ /**
+  * Create an instance of OkResult given an JSON string
+  *
+  * @param jsonString JSON string
+  * @return An instance of OkResult
+  * @throws IOException if the JSON string is invalid with respect to OkResult
+  */
+  public static OkResult fromJson(String jsonString) throws IOException {
+    return JSON.getGson().fromJson(jsonString, OkResult.class);
+  }
+
+ /**
+  * Convert an instance of OkResult to an JSON string
+  *
+  * @return JSON string
+  */
+  public String toJson() {
+    return JSON.getGson().toJson(this);
+  }
 }
+

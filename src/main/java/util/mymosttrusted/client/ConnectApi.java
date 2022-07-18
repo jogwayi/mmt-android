@@ -1,360 +1,456 @@
-/**
- * MMT reports API
- * MMT reports API documentation.
- *
- * Do not edit the class manually.
+/*
+  MMT reports API
+  MMT reports API documentation.
+ 
+  Do not edit the class manually.
  */
+
 
 package util.mymosttrusted.client;
 
-import util.mymosttrusted.api.ApiInvoker;
-import util.mymosttrusted.api.ApiException;
-import util.mymosttrusted.api.Pair;
+import com.google.gson.reflect.TypeToken;
 
-import util.mymosttrusted.model.*;
-
-import java.util.*;
-
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-
-import util.mymosttrusted.model.ConnectUserResult;
-
-import org.apache.http.HttpEntity;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
-
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeoutException;
+
+import util.mymosttrusted.api.ApiCallback;
+import util.mymosttrusted.api.ApiClient;
+import util.mymosttrusted.api.ApiException;
+import util.mymosttrusted.api.ApiResponse;
+import util.mymosttrusted.api.Configuration;
+import util.mymosttrusted.api.Pair;
+import util.mymosttrusted.model.ConnectUserResult;
 
 public class ConnectApi {
-  String basePath = "https://api.mymosttrusted.net/v1";
-  ApiInvoker apiInvoker = ApiInvoker.getInstance();
+    private ApiClient localVarApiClient;
+    private int localHostIndex;
+    private String localCustomBaseUrl;
 
-  public void addHeader(String key, String value) {
-    getInvoker().addDefaultHeader(key, value);
-  }
-
-  public ApiInvoker getInvoker() {
-    return apiInvoker;
-  }
-
-  public void setBasePath(String basePath) {
-    this.basePath = basePath;
-  }
-
-  public String getBasePath() {
-    return basePath;
-  }
-
-  /**
-  * Get to connect contacts listed by specific user
-  * Returns a list of to connect contacts listed by the user with LinkedIn id li_user_id
-   * @param networkId Network ID for the stats
-   * @param userId LinkedIn identifier for the user in case of a specific user stats
-   * @param page Page to fetch
-   * @param limit Number of records to return per page, maximum allowed number is 50
-   * @param liUserId Get to connect contacts specific to an invite li_user_id
-   * @param firstName Find to connect contacts with first names alike to this first name
-   * @param lastName Find to connect contacts with last names alike to this last name
-   * @param location Find to connect contacts in location alike to this location
-   * @param fromDate Get to connect contacts created from this date onwards
-   * @return ConnectUserResult
-  */
-  public ConnectUserResult getConnectInvites (Integer networkId, String userId, Integer page, Integer limit, String liUserId, String firstName, String lastName, String location, String fromDate) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
-    Object postBody = null;
-    // verify the required parameter 'networkId' is set
-    if (networkId == null) {
-      VolleyError error = new VolleyError("Missing the required parameter 'networkId' when calling getConnectInvites",
-        new ApiException(400, "Missing the required parameter 'networkId' when calling getConnectInvites"));
-    }
-    // verify the required parameter 'userId' is set
-    if (userId == null) {
-      VolleyError error = new VolleyError("Missing the required parameter 'userId' when calling getConnectInvites",
-        new ApiException(400, "Missing the required parameter 'userId' when calling getConnectInvites"));
+    public ConnectApi() {
+        this(Configuration.getDefaultApiClient());
     }
 
-    // create path and map variables
-    String path = "/network/{network_id}/connects/{user_id}".replaceAll("\\{" + "network_id" + "\\}", apiInvoker.escapeString(networkId.toString())).replaceAll("\\{" + "user_id" + "\\}", apiInvoker.escapeString(userId.toString()));
-
-    // query params
-    List<Pair> queryParams = new ArrayList<Pair>();
-    // header params
-    Map<String, String> headerParams = new HashMap<String, String>();
-    // form params
-    Map<String, String> formParams = new HashMap<String, String>();
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "page", page));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "limit", limit));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "li_user_id", liUserId));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "first_name", firstName));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "last_name", lastName));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "location", location));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "from_date", fromDate));
-    String[] contentTypes = {
-    };
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-
-    if (contentType.startsWith("multipart/form-data")) {
-      // file uploading
-      MultipartEntityBuilder localVarBuilder = MultipartEntityBuilder.create();
-      HttpEntity httpEntity = localVarBuilder.build();
-      postBody = httpEntity;
-    } else {
-      // normal form params
+    public ConnectApi(ApiClient apiClient) {
+        this.localVarApiClient = apiClient;
     }
 
-    String[] authNames = new String[] { "ApiKeyAuth" };
+    public ApiClient getApiClient() {
+        return localVarApiClient;
+    }
 
-    try {
-      String localVarResponse = apiInvoker.invokeAPI (basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, authNames);
-      if (localVarResponse != null) {
-         return (ConnectUserResult) ApiInvoker.deserialize(localVarResponse, "", ConnectUserResult.class);
-      } else {
-         return null;
-      }
-    } catch (ApiException ex) {
-       throw ex;
-    } catch (InterruptedException ex) {
-       throw ex;
-    } catch (ExecutionException ex) {
-      if (ex.getCause() instanceof VolleyError) {
-        VolleyError volleyError = (VolleyError)ex.getCause();
-        if (volleyError.networkResponse != null) {
-          throw new ApiException(volleyError.networkResponse.statusCode, volleyError.getMessage());
+    public void setApiClient(ApiClient apiClient) {
+        this.localVarApiClient = apiClient;
+    }
+
+    public int getHostIndex() {
+        return localHostIndex;
+    }
+
+    public void setHostIndex(int hostIndex) {
+        this.localHostIndex = hostIndex;
+    }
+
+    public String getCustomBaseUrl() {
+        return localCustomBaseUrl;
+    }
+
+    public void setCustomBaseUrl(String customBaseUrl) {
+        this.localCustomBaseUrl = customBaseUrl;
+    }
+
+    /**
+     * Build call for getConnectInvites
+     * @param networkId Network ID for the stats (required)
+     * @param userId LinkedIn identifier for the user in case of a specific user stats (required)
+     * @param page Page to fetch (optional, default to 1)
+     * @param limit Number of records to return per page, maximum allowed number is 50 (optional, default to 50)
+     * @param liUserId Get to connect contacts specific to an invite li_user_id (optional)
+     * @param firstName Find to connect contacts with first names alike to this first name (optional)
+     * @param lastName Find to connect contacts with last names alike to this last name (optional)
+     * @param location Find to connect contacts in location alike to this location (optional)
+     * @param fromDate Get to connect contacts created from this date onwards (optional)
+     * @param _callback Callback for upload/download progress
+     * @return Call to execute
+     * @throws ApiException If fail to serialize the request body object
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> A List of to connect contacts by user with id li_user_id in this network </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Your request was made with invalid credentials. </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> You&#39;re not supposed to access this resource. </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call getConnectInvitesCall(Integer networkId, String userId, Integer page, Integer limit, String liUserId, String firstName, String lastName, String location, String fromDate, final ApiCallback _callback) throws ApiException {
+        String basePath = null;
+        // Operation Servers
+        String[] localBasePaths = new String[] {  };
+
+        // Determine Base Path to Use
+        if (localCustomBaseUrl != null){
+            basePath = localCustomBaseUrl;
+        } else if ( localBasePaths.length > 0 ) {
+            basePath = localBasePaths[localHostIndex];
+        } else {
+            basePath = null;
         }
-      }
-      throw ex;
-    } catch (TimeoutException ex) {
-      throw ex;
-    }
-  }
 
-      /**
-   * Get to connect contacts listed by specific user
-   * Returns a list of to connect contacts listed by the user with LinkedIn id li_user_id
-   * @param networkId Network ID for the stats   * @param userId LinkedIn identifier for the user in case of a specific user stats   * @param page Page to fetch   * @param limit Number of records to return per page, maximum allowed number is 50   * @param liUserId Get to connect contacts specific to an invite li_user_id   * @param firstName Find to connect contacts with first names alike to this first name   * @param lastName Find to connect contacts with last names alike to this last name   * @param location Find to connect contacts in location alike to this location   * @param fromDate Get to connect contacts created from this date onwards
-  */
-  public void getConnectInvites (Integer networkId, String userId, Integer page, Integer limit, String liUserId, String firstName, String lastName, String location, String fromDate, final Response.Listener<ConnectUserResult> responseListener, final Response.ErrorListener errorListener) {
-    Object postBody = null;
+        Object localVarPostBody = null;
 
-    // verify the required parameter 'networkId' is set
-    if (networkId == null) {
-      VolleyError error = new VolleyError("Missing the required parameter 'networkId' when calling getConnectInvites",
-        new ApiException(400, "Missing the required parameter 'networkId' when calling getConnectInvites"));
-    }
-    // verify the required parameter 'userId' is set
-    if (userId == null) {
-      VolleyError error = new VolleyError("Missing the required parameter 'userId' when calling getConnectInvites",
-        new ApiException(400, "Missing the required parameter 'userId' when calling getConnectInvites"));
-    }
+        // create path and map variables
+        String localVarPath = "/network/{network_id}/connects/{user_id}"
+            .replaceAll("\\{" + "network_id" + "\\}", localVarApiClient.escapeString(networkId.toString()))
+            .replaceAll("\\{" + "user_id" + "\\}", localVarApiClient.escapeString(userId.toString()));
 
-    // create path and map variables
-    String path = "/network/{network_id}/connects/{user_id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "network_id" + "\\}", apiInvoker.escapeString(networkId.toString())).replaceAll("\\{" + "user_id" + "\\}", apiInvoker.escapeString(userId.toString()));
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+        Map<String, String> localVarCookieParams = new HashMap<String, String>();
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
-    // query params
-    List<Pair> queryParams = new ArrayList<Pair>();
-    // header params
-    Map<String, String> headerParams = new HashMap<String, String>();
-    // form params
-    Map<String, String> formParams = new HashMap<String, String>();
-
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "page", page));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "limit", limit));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "li_user_id", liUserId));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "first_name", firstName));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "last_name", lastName));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "location", location));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "from_date", fromDate));
-
-
-    String[] contentTypes = {
-      
-    };
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-
-    if (contentType.startsWith("multipart/form-data")) {
-      // file uploading
-      MultipartEntityBuilder localVarBuilder = MultipartEntityBuilder.create();
-      
-
-      HttpEntity httpEntity = localVarBuilder.build();
-      postBody = httpEntity;
-    } else {
-      // normal form params
-          }
-
-    String[] authNames = new String[] { "ApiKeyAuth" };
-
-    try {
-      apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, authNames,
-        new Response.Listener<String>() {
-          @Override
-          public void onResponse(String localVarResponse) {
-            try {
-              responseListener.onResponse((ConnectUserResult) ApiInvoker.deserialize(localVarResponse,  "", ConnectUserResult.class));
-            } catch (ApiException exception) {
-               errorListener.onErrorResponse(new VolleyError(exception));
-            }
-          }
-      }, new Response.ErrorListener() {
-          @Override
-          public void onErrorResponse(VolleyError error) {
-            errorListener.onErrorResponse(error);
-          }
-      });
-    } catch (ApiException ex) {
-      errorListener.onErrorResponse(new VolleyError(ex));
-    }
-  }
-  /**
-  * Get summarised to connect contacts listed in network
-  * Returns a list of to connect contacts listed in network
-   * @param networkId Network ID for the stats
-   * @param page Page to fetch
-   * @param limit Number of records to return per page, maximum allowed number is 50
-   * @param liUserId Get invite specific to li_user_id
-   * @param firstName Find to connect contacts with first names alike to this first name
-   * @param lastName Find to connect contacts with last names alike to this last name
-   * @param location Find to connect contacts in location alike to this location
-   * @param fromDate Get to connect contacts created from this date onwards
-   * @return ConnectUserResult
-  */
-  public ConnectUserResult getConnectSummary (Integer networkId, Integer page, Integer limit, String liUserId, String firstName, String lastName, String location, String fromDate) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
-    Object postBody = null;
-    // verify the required parameter 'networkId' is set
-    if (networkId == null) {
-      VolleyError error = new VolleyError("Missing the required parameter 'networkId' when calling getConnectSummary",
-        new ApiException(400, "Missing the required parameter 'networkId' when calling getConnectSummary"));
-    }
-
-    // create path and map variables
-    String path = "/network/{network_id}/connects".replaceAll("\\{" + "network_id" + "\\}", apiInvoker.escapeString(networkId.toString()));
-
-    // query params
-    List<Pair> queryParams = new ArrayList<Pair>();
-    // header params
-    Map<String, String> headerParams = new HashMap<String, String>();
-    // form params
-    Map<String, String> formParams = new HashMap<String, String>();
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "page", page));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "limit", limit));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "li_user_id", liUserId));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "first_name", firstName));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "last_name", lastName));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "location", location));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "from_date", fromDate));
-    String[] contentTypes = {
-    };
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-
-    if (contentType.startsWith("multipart/form-data")) {
-      // file uploading
-      MultipartEntityBuilder localVarBuilder = MultipartEntityBuilder.create();
-      HttpEntity httpEntity = localVarBuilder.build();
-      postBody = httpEntity;
-    } else {
-      // normal form params
-    }
-
-    String[] authNames = new String[] { "ApiKeyAuth" };
-
-    try {
-      String localVarResponse = apiInvoker.invokeAPI (basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, authNames);
-      if (localVarResponse != null) {
-         return (ConnectUserResult) ApiInvoker.deserialize(localVarResponse, "", ConnectUserResult.class);
-      } else {
-         return null;
-      }
-    } catch (ApiException ex) {
-       throw ex;
-    } catch (InterruptedException ex) {
-       throw ex;
-    } catch (ExecutionException ex) {
-      if (ex.getCause() instanceof VolleyError) {
-        VolleyError volleyError = (VolleyError)ex.getCause();
-        if (volleyError.networkResponse != null) {
-          throw new ApiException(volleyError.networkResponse.statusCode, volleyError.getMessage());
+        if (page != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("page", page));
         }
-      }
-      throw ex;
-    } catch (TimeoutException ex) {
-      throw ex;
+
+        if (limit != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("limit", limit));
+        }
+
+        if (liUserId != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("li_user_id", liUserId));
+        }
+
+        if (firstName != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("first_name", firstName));
+        }
+
+        if (lastName != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("last_name", lastName));
+        }
+
+        if (location != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("location", location));
+        }
+
+        if (fromDate != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("from_date", fromDate));
+        }
+
+        final String[] localVarAccepts = {
+            "application/json"
+        };
+        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) {
+            localVarHeaderParams.put("Accept", localVarAccept);
+        }
+
+        final String[] localVarContentTypes = {
+            
+        };
+        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
+        if (localVarContentType != null) {
+            localVarHeaderParams.put("Content-Type", localVarContentType);
+        }
+
+        String[] localVarAuthNames = new String[] { "ApiKeyAuth" };
+        return localVarApiClient.buildCall(basePath, localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
     }
-  }
 
-      /**
-   * Get summarised to connect contacts listed in network
-   * Returns a list of to connect contacts listed in network
-   * @param networkId Network ID for the stats   * @param page Page to fetch   * @param limit Number of records to return per page, maximum allowed number is 50   * @param liUserId Get invite specific to li_user_id   * @param firstName Find to connect contacts with first names alike to this first name   * @param lastName Find to connect contacts with last names alike to this last name   * @param location Find to connect contacts in location alike to this location   * @param fromDate Get to connect contacts created from this date onwards
-  */
-  public void getConnectSummary (Integer networkId, Integer page, Integer limit, String liUserId, String firstName, String lastName, String location, String fromDate, final Response.Listener<ConnectUserResult> responseListener, final Response.ErrorListener errorListener) {
-    Object postBody = null;
+    @SuppressWarnings("rawtypes")
+    private okhttp3.Call getConnectInvitesValidateBeforeCall(Integer networkId, String userId, Integer page, Integer limit, String liUserId, String firstName, String lastName, String location, String fromDate, final ApiCallback _callback) throws ApiException {
+        
+        // verify the required parameter 'networkId' is set
+        if (networkId == null) {
+            throw new ApiException("Missing the required parameter 'networkId' when calling getConnectInvites(Async)");
+        }
+        
+        // verify the required parameter 'userId' is set
+        if (userId == null) {
+            throw new ApiException("Missing the required parameter 'userId' when calling getConnectInvites(Async)");
+        }
+        
 
-    // verify the required parameter 'networkId' is set
-    if (networkId == null) {
-      VolleyError error = new VolleyError("Missing the required parameter 'networkId' when calling getConnectSummary",
-        new ApiException(400, "Missing the required parameter 'networkId' when calling getConnectSummary"));
+        okhttp3.Call localVarCall = getConnectInvitesCall(networkId, userId, page, limit, liUserId, firstName, lastName, location, fromDate, _callback);
+        return localVarCall;
+
     }
 
-    // create path and map variables
-    String path = "/network/{network_id}/connects".replaceAll("\\{format\\}","json").replaceAll("\\{" + "network_id" + "\\}", apiInvoker.escapeString(networkId.toString()));
-
-    // query params
-    List<Pair> queryParams = new ArrayList<Pair>();
-    // header params
-    Map<String, String> headerParams = new HashMap<String, String>();
-    // form params
-    Map<String, String> formParams = new HashMap<String, String>();
-
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "page", page));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "limit", limit));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "li_user_id", liUserId));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "first_name", firstName));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "last_name", lastName));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "location", location));
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "from_date", fromDate));
-
-
-    String[] contentTypes = {
-      
-    };
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-
-    if (contentType.startsWith("multipart/form-data")) {
-      // file uploading
-      MultipartEntityBuilder localVarBuilder = MultipartEntityBuilder.create();
-      
-
-      HttpEntity httpEntity = localVarBuilder.build();
-      postBody = httpEntity;
-    } else {
-      // normal form params
-          }
-
-    String[] authNames = new String[] { "ApiKeyAuth" };
-
-    try {
-      apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, authNames,
-        new Response.Listener<String>() {
-          @Override
-          public void onResponse(String localVarResponse) {
-            try {
-              responseListener.onResponse((ConnectUserResult) ApiInvoker.deserialize(localVarResponse,  "", ConnectUserResult.class));
-            } catch (ApiException exception) {
-               errorListener.onErrorResponse(new VolleyError(exception));
-            }
-          }
-      }, new Response.ErrorListener() {
-          @Override
-          public void onErrorResponse(VolleyError error) {
-            errorListener.onErrorResponse(error);
-          }
-      });
-    } catch (ApiException ex) {
-      errorListener.onErrorResponse(new VolleyError(ex));
+    /**
+     * Get to connect contacts listed by specific user
+     * Returns a list of to connect contacts listed by the user with LinkedIn id li_user_id
+     * @param networkId Network ID for the stats (required)
+     * @param userId LinkedIn identifier for the user in case of a specific user stats (required)
+     * @param page Page to fetch (optional, default to 1)
+     * @param limit Number of records to return per page, maximum allowed number is 50 (optional, default to 50)
+     * @param liUserId Get to connect contacts specific to an invite li_user_id (optional)
+     * @param firstName Find to connect contacts with first names alike to this first name (optional)
+     * @param lastName Find to connect contacts with last names alike to this last name (optional)
+     * @param location Find to connect contacts in location alike to this location (optional)
+     * @param fromDate Get to connect contacts created from this date onwards (optional)
+     * @return ConnectUserResult
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> A List of to connect contacts by user with id li_user_id in this network </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Your request was made with invalid credentials. </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> You&#39;re not supposed to access this resource. </td><td>  -  </td></tr>
+     </table>
+     */
+    public ConnectUserResult getConnectInvites(Integer networkId, String userId, Integer page, Integer limit, String liUserId, String firstName, String lastName, String location, String fromDate) throws ApiException {
+        ApiResponse<ConnectUserResult> localVarResp = getConnectInvitesWithHttpInfo(networkId, userId, page, limit, liUserId, firstName, lastName, location, fromDate);
+        return localVarResp.getData();
     }
-  }
+
+    /**
+     * Get to connect contacts listed by specific user
+     * Returns a list of to connect contacts listed by the user with LinkedIn id li_user_id
+     * @param networkId Network ID for the stats (required)
+     * @param userId LinkedIn identifier for the user in case of a specific user stats (required)
+     * @param page Page to fetch (optional, default to 1)
+     * @param limit Number of records to return per page, maximum allowed number is 50 (optional, default to 50)
+     * @param liUserId Get to connect contacts specific to an invite li_user_id (optional)
+     * @param firstName Find to connect contacts with first names alike to this first name (optional)
+     * @param lastName Find to connect contacts with last names alike to this last name (optional)
+     * @param location Find to connect contacts in location alike to this location (optional)
+     * @param fromDate Get to connect contacts created from this date onwards (optional)
+     * @return ApiResponse&lt;ConnectUserResult&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> A List of to connect contacts by user with id li_user_id in this network </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Your request was made with invalid credentials. </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> You&#39;re not supposed to access this resource. </td><td>  -  </td></tr>
+     </table>
+     */
+    public ApiResponse<ConnectUserResult> getConnectInvitesWithHttpInfo(Integer networkId, String userId, Integer page, Integer limit, String liUserId, String firstName, String lastName, String location, String fromDate) throws ApiException {
+        okhttp3.Call localVarCall = getConnectInvitesValidateBeforeCall(networkId, userId, page, limit, liUserId, firstName, lastName, location, fromDate, null);
+        Type localVarReturnType = new TypeToken<ConnectUserResult>(){}.getType();
+        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    }
+
+    /**
+     * Get to connect contacts listed by specific user (asynchronously)
+     * Returns a list of to connect contacts listed by the user with LinkedIn id li_user_id
+     * @param networkId Network ID for the stats (required)
+     * @param userId LinkedIn identifier for the user in case of a specific user stats (required)
+     * @param page Page to fetch (optional, default to 1)
+     * @param limit Number of records to return per page, maximum allowed number is 50 (optional, default to 50)
+     * @param liUserId Get to connect contacts specific to an invite li_user_id (optional)
+     * @param firstName Find to connect contacts with first names alike to this first name (optional)
+     * @param lastName Find to connect contacts with last names alike to this last name (optional)
+     * @param location Find to connect contacts in location alike to this location (optional)
+     * @param fromDate Get to connect contacts created from this date onwards (optional)
+     * @param _callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> A List of to connect contacts by user with id li_user_id in this network </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Your request was made with invalid credentials. </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> You&#39;re not supposed to access this resource. </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call getConnectInvitesAsync(Integer networkId, String userId, Integer page, Integer limit, String liUserId, String firstName, String lastName, String location, String fromDate, final ApiCallback<ConnectUserResult> _callback) throws ApiException {
+
+        okhttp3.Call localVarCall = getConnectInvitesValidateBeforeCall(networkId, userId, page, limit, liUserId, firstName, lastName, location, fromDate, _callback);
+        Type localVarReturnType = new TypeToken<ConnectUserResult>(){}.getType();
+        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
+        return localVarCall;
+    }
+    /**
+     * Build call for getConnectSummary
+     * @param networkId Network ID for the stats (required)
+     * @param page Page to fetch (optional, default to 1)
+     * @param limit Number of records to return per page, maximum allowed number is 50 (optional, default to 50)
+     * @param liUserId Get invite specific to li_user_id (optional)
+     * @param firstName Find to connect contacts with first names alike to this first name (optional)
+     * @param lastName Find to connect contacts with last names alike to this last name (optional)
+     * @param location Find to connect contacts in location alike to this location (optional)
+     * @param fromDate Get to connect contacts created from this date onwards (optional)
+     * @param _callback Callback for upload/download progress
+     * @return Call to execute
+     * @throws ApiException If fail to serialize the request body object
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> A List of to connect contacts in this network </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Your request was made with invalid credentials. </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> You&#39;re not supposed to access this resource. </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call getConnectSummaryCall(Integer networkId, Integer page, Integer limit, String liUserId, String firstName, String lastName, String location, String fromDate, final ApiCallback _callback) throws ApiException {
+        String basePath = null;
+        // Operation Servers
+        String[] localBasePaths = new String[] {  };
+
+        // Determine Base Path to Use
+        if (localCustomBaseUrl != null){
+            basePath = localCustomBaseUrl;
+        } else if ( localBasePaths.length > 0 ) {
+            basePath = localBasePaths[localHostIndex];
+        } else {
+            basePath = null;
+        }
+
+        Object localVarPostBody = null;
+
+        // create path and map variables
+        String localVarPath = "/network/{network_id}/connects"
+            .replaceAll("\\{" + "network_id" + "\\}", localVarApiClient.escapeString(networkId.toString()));
+
+        List<Pair> localVarQueryParams = new ArrayList<Pair>();
+        List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
+        Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+        Map<String, String> localVarCookieParams = new HashMap<String, String>();
+        Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+        if (page != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("page", page));
+        }
+
+        if (limit != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("limit", limit));
+        }
+
+        if (liUserId != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("li_user_id", liUserId));
+        }
+
+        if (firstName != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("first_name", firstName));
+        }
+
+        if (lastName != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("last_name", lastName));
+        }
+
+        if (location != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("location", location));
+        }
+
+        if (fromDate != null) {
+            localVarQueryParams.addAll(localVarApiClient.parameterToPair("from_date", fromDate));
+        }
+
+        final String[] localVarAccepts = {
+            "application/json"
+        };
+        final String localVarAccept = localVarApiClient.selectHeaderAccept(localVarAccepts);
+        if (localVarAccept != null) {
+            localVarHeaderParams.put("Accept", localVarAccept);
+        }
+
+        final String[] localVarContentTypes = {
+            
+        };
+        final String localVarContentType = localVarApiClient.selectHeaderContentType(localVarContentTypes);
+        if (localVarContentType != null) {
+            localVarHeaderParams.put("Content-Type", localVarContentType);
+        }
+
+        String[] localVarAuthNames = new String[] { "ApiKeyAuth" };
+        return localVarApiClient.buildCall(basePath, localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarCookieParams, localVarFormParams, localVarAuthNames, _callback);
+    }
+
+    @SuppressWarnings("rawtypes")
+    private okhttp3.Call getConnectSummaryValidateBeforeCall(Integer networkId, Integer page, Integer limit, String liUserId, String firstName, String lastName, String location, String fromDate, final ApiCallback _callback) throws ApiException {
+        
+        // verify the required parameter 'networkId' is set
+        if (networkId == null) {
+            throw new ApiException("Missing the required parameter 'networkId' when calling getConnectSummary(Async)");
+        }
+        
+
+        okhttp3.Call localVarCall = getConnectSummaryCall(networkId, page, limit, liUserId, firstName, lastName, location, fromDate, _callback);
+        return localVarCall;
+
+    }
+
+    /**
+     * Get summarised to connect contacts listed in network
+     * Returns a list of to connect contacts listed in network
+     * @param networkId Network ID for the stats (required)
+     * @param page Page to fetch (optional, default to 1)
+     * @param limit Number of records to return per page, maximum allowed number is 50 (optional, default to 50)
+     * @param liUserId Get invite specific to li_user_id (optional)
+     * @param firstName Find to connect contacts with first names alike to this first name (optional)
+     * @param lastName Find to connect contacts with last names alike to this last name (optional)
+     * @param location Find to connect contacts in location alike to this location (optional)
+     * @param fromDate Get to connect contacts created from this date onwards (optional)
+     * @return ConnectUserResult
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> A List of to connect contacts in this network </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Your request was made with invalid credentials. </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> You&#39;re not supposed to access this resource. </td><td>  -  </td></tr>
+     </table>
+     */
+    public ConnectUserResult getConnectSummary(Integer networkId, Integer page, Integer limit, String liUserId, String firstName, String lastName, String location, String fromDate) throws ApiException {
+        ApiResponse<ConnectUserResult> localVarResp = getConnectSummaryWithHttpInfo(networkId, page, limit, liUserId, firstName, lastName, location, fromDate);
+        return localVarResp.getData();
+    }
+
+    /**
+     * Get summarised to connect contacts listed in network
+     * Returns a list of to connect contacts listed in network
+     * @param networkId Network ID for the stats (required)
+     * @param page Page to fetch (optional, default to 1)
+     * @param limit Number of records to return per page, maximum allowed number is 50 (optional, default to 50)
+     * @param liUserId Get invite specific to li_user_id (optional)
+     * @param firstName Find to connect contacts with first names alike to this first name (optional)
+     * @param lastName Find to connect contacts with last names alike to this last name (optional)
+     * @param location Find to connect contacts in location alike to this location (optional)
+     * @param fromDate Get to connect contacts created from this date onwards (optional)
+     * @return ApiResponse&lt;ConnectUserResult&gt;
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> A List of to connect contacts in this network </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Your request was made with invalid credentials. </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> You&#39;re not supposed to access this resource. </td><td>  -  </td></tr>
+     </table>
+     */
+    public ApiResponse<ConnectUserResult> getConnectSummaryWithHttpInfo(Integer networkId, Integer page, Integer limit, String liUserId, String firstName, String lastName, String location, String fromDate) throws ApiException {
+        okhttp3.Call localVarCall = getConnectSummaryValidateBeforeCall(networkId, page, limit, liUserId, firstName, lastName, location, fromDate, null);
+        Type localVarReturnType = new TypeToken<ConnectUserResult>(){}.getType();
+        return localVarApiClient.execute(localVarCall, localVarReturnType);
+    }
+
+    /**
+     * Get summarised to connect contacts listed in network (asynchronously)
+     * Returns a list of to connect contacts listed in network
+     * @param networkId Network ID for the stats (required)
+     * @param page Page to fetch (optional, default to 1)
+     * @param limit Number of records to return per page, maximum allowed number is 50 (optional, default to 50)
+     * @param liUserId Get invite specific to li_user_id (optional)
+     * @param firstName Find to connect contacts with first names alike to this first name (optional)
+     * @param lastName Find to connect contacts with last names alike to this last name (optional)
+     * @param location Find to connect contacts in location alike to this location (optional)
+     * @param fromDate Get to connect contacts created from this date onwards (optional)
+     * @param _callback The callback to be executed when the API call finishes
+     * @return The request call
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @http.response.details
+     <table summary="Response Details" border="1">
+        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+        <tr><td> 200 </td><td> A List of to connect contacts in this network </td><td>  -  </td></tr>
+        <tr><td> 401 </td><td> Your request was made with invalid credentials. </td><td>  -  </td></tr>
+        <tr><td> 403 </td><td> You&#39;re not supposed to access this resource. </td><td>  -  </td></tr>
+     </table>
+     */
+    public okhttp3.Call getConnectSummaryAsync(Integer networkId, Integer page, Integer limit, String liUserId, String firstName, String lastName, String location, String fromDate, final ApiCallback<ConnectUserResult> _callback) throws ApiException {
+
+        okhttp3.Call localVarCall = getConnectSummaryValidateBeforeCall(networkId, page, limit, liUserId, firstName, lastName, location, fromDate, _callback);
+        Type localVarReturnType = new TypeToken<ConnectUserResult>(){}.getType();
+        localVarApiClient.executeAsync(localVarCall, localVarReturnType, _callback);
+        return localVarCall;
+    }
 }

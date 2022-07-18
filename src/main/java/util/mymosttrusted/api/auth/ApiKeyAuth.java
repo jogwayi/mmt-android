@@ -1,17 +1,21 @@
-/**
- * MMT reports API
- * MMT reports API documentation.
- *
- * Do not edit the class manually.
+/*
+  MMT reports API
+  MMT reports API documentation.
+ 
+  Do not edit the class manually.
  */
+
 
 package util.mymosttrusted.api.auth;
 
+import util.mymosttrusted.api.ApiException;
 import util.mymosttrusted.api.Pair;
 
+import java.net.URI;
 import java.util.Map;
 import java.util.List;
 
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2022-07-18T09:33:18.403887+03:00[Africa/Nairobi]")
 public class ApiKeyAuth implements Authentication {
   private final String location;
   private final String paramName;
@@ -49,11 +53,12 @@ public class ApiKeyAuth implements Authentication {
   }
 
   @Override
-  public void applyToParams(List<Pair> queryParams, Map<String, String> headerParams) {
-    String value;
+  public void applyToParams(List<Pair> queryParams, Map<String, String> headerParams, Map<String, String> cookieParams,
+                           String payload, String method, URI uri) throws ApiException {
     if (apiKey == null) {
       return;
     }
+    String value;
     if (apiKeyPrefix != null) {
       value = apiKeyPrefix + " " + apiKey;
     } else {
@@ -63,6 +68,8 @@ public class ApiKeyAuth implements Authentication {
       queryParams.add(new Pair(paramName, value));
     } else if ("header".equals(location)) {
       headerParams.put(paramName, value);
+    } else if ("cookie".equals(location)) {
+      cookieParams.put(paramName, value);
     }
   }
 }

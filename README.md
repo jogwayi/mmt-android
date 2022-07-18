@@ -58,23 +58,47 @@ Please follow the [installation](#installation) instruction and execute the foll
 
 ```java
 
+## Getting Started
+
+Please follow the [installation](#installation) instruction and execute the following Java code:
+
+```java
+
+// Import classes:
+import util.mymosttrusted.api.ApiClient;
+import util.mymosttrusted.api.ApiException;
+import util.mymosttrusted.api.Configuration;
+import util.mymosttrusted.api.auth.*;
+import util.mymosttrusted.api.models.*;
 import util.mymosttrusted.client.ConfigApi;
 
-public class ConfigApiExample {
+public class Example {
+  public static void main(String[] args) {
+    ApiClient defaultClient = Configuration.getDefaultApiClient();
+    defaultClient.setBasePath("https://api.mymosttrusted.net/v1");
+    
+    // Configure HTTP bearer authorization: ApiKeyAuth
+    HttpBearerAuth ApiKeyAuth = (HttpBearerAuth) defaultClient.getAuthentication("ApiKeyAuth");
+    ApiKeyAuth.setBearerToken("BEARER TOKEN");
 
-    public static void main(String[] args) {
-        ConfigApi apiInstance = new ConfigApi();
-        Integer networkId = 1; // Integer | Network ID for the stats
-        String userId = null; // String | LinkedIn identifier for the user's configurations
-        try {
-            ConfigResult result = apiInstance.getConfig(networkId, userId);
-            System.out.println(result);
-        } catch (ApiException e) {
-            System.err.println("Exception when calling ConfigApi#getConfig");
-            e.printStackTrace();
-        }
+    ConfigApi apiInstance = new ConfigApi(defaultClient);
+    Integer networkId = 1; // Integer | Network ID for the stats
+    String userId = "userId_example"; // String | LinkedIn identifier for the user's configurations
+    try {
+      ConfigResult result = apiInstance.getConfig(networkId, userId);
+      System.out.println(result);
+    } catch (ApiException e) {
+      System.err.println("Exception when calling ConfigApi#getConfig");
+      System.err.println("Status code: " + e.getCode());
+      System.err.println("Reason: " + e.getResponseBody());
+      System.err.println("Response headers: " + e.getResponseHeaders());
+      e.printStackTrace();
     }
+  }
 }
+
+```
+
 
 ```
 
